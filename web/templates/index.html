@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HED Experiment Lab</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-brain"></i> HED Experiment Lab</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#experiments" onclick="loadExperiments()">
+                            <i class="fas fa-history"></i> Experiments
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Main Experiment Interface -->
+        <div class="row">
+            <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                <h5><i class="fas fa-flask"></i> New Experiment</h5>
+                </div>
+                <div class="card-body">
+                <form id="experimentForm">
+                    <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="modelSelect" class="form-label">Model</label>
+                        <select class="form-select" id="modelSelect" required>
+                        <option value="">Select a model...</option>
+                        </select>
+                    </div>
+                    </div>
+                    <div class="row mb-3">
+                    <div class="col-12">
+                        <label for="descriptionInput" class="form-label">Description</label>
+                        <textarea class="form-control" id="descriptionInput" rows="3" 
+                              placeholder="Enter your description..." required></textarea>
+                    </div>
+                    </div>
+                    <div class="mb-3">
+                    <label for="promptTemplate" class="form-label">Prompt Template</label>
+                    <textarea class="form-control" id="promptTemplate" rows="12" required></textarea>
+                    </div>
+                    <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-play"></i> Run Experiment
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
+                    </div>
+                </form>
+                </div>
+            </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-history"></i> Recent Experiments</h5>
+                    </div>
+                    <div class="card-body" id="recentExperiments">
+                        <p class="text-muted">Loading experiments...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="row mt-4" id="resultsSection" style="display: none;">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5><i class="fas fa-chart-line"></i> Results</h5>
+                        <div>
+                            <button class="btn btn-success btn-sm" onclick="saveExperiment()">
+                                <i class="fas fa-save"></i> Save
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm" onclick="hideResults()">
+                                <i class="fas fa-times"></i> Close
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Model Response</h6>
+                                <pre id="modelResponse" class="bg-light p-3 rounded"></pre>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Full Prompt</h6>
+                                <pre id="fullPrompt" class="bg-light p-3 rounded" style="max-height: 400px; overflow-y: auto;"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Modal -->
+    <div class="modal fade" id="loadingModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-3 mb-0">Running experiment...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Experiment Details Modal -->
+    <div class="modal fade" id="experimentModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Experiment Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="experimentDetails"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" onclick="loadExperimentToForm()">
+                        <i class="fas fa-edit"></i> Load to Form
+                    </button>
+                    <button type="button" class="btn btn-outline-success" onclick="downloadExperiment()">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
