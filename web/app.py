@@ -10,7 +10,8 @@ import datetime
 import time
 from pathlib import Path
 
-load_dotenv()
+# Load environment variables from parent directory
+load_dotenv(Path(__file__).parent.parent / '.env')
 
 app = Flask(__name__)
 
@@ -203,7 +204,11 @@ def run_experiment():
         # Choose the appropriate API based on model
         if model.startswith('gemini'):
             # Use Gemini API
-            client = genai.Client()
+            api_key = os.getenv('GEMINI_API_KEY')
+            if not api_key:
+                raise ValueError("GEMINI_API_KEY environment variable is not set")
+            
+            client = genai.Client(api_key=api_key)
             response = client.models.generate_content(
                 model=model,
                 contents=prompt
@@ -402,4 +407,4 @@ def update_experiment_name():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=3000)
