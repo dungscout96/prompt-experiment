@@ -2,6 +2,8 @@
 
 A web application for experimenting with Hierarchical Event Descriptor (HED) vocabulary annotations using various AI models. This tool allows researchers to test different prompts, compare model responses, and systematically evaluate HED annotation quality.
 
+![alt text](image.png)
+
 ## Features
 
 - **Multi-Model Support**: Compatible with both Ollama (local) and Google Gemini (cloud) models
