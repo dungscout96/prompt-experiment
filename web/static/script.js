@@ -312,7 +312,7 @@ async function runExperiment() {
         }
         
         // Display results
-        displayResults(result);
+        displayResults(result, experimentName);
         
         // Store current experiment data for potential manual operations
         currentExperimentData = {
@@ -346,12 +346,12 @@ async function runExperiment() {
 }
 
 // Display results
-function displayResults(result) {
+function displayResults(result, experimentName = '') {
     document.getElementById('modelResponse').textContent = result.response;
     document.getElementById('fullPrompt').textContent = result.prompt;
     
     // Display experiment name in the editable field
-    document.getElementById('resultExperimentName').value = currentExperimentData.experiment_name || '';
+    document.getElementById('resultExperimentName').value = experimentName || '';
     
     // Display inference time and model
     document.getElementById('inferenceTime').textContent = formatInferenceTime(result.inference_time);
