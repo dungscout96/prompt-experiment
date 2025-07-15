@@ -9,6 +9,7 @@ import json
 import datetime
 import time
 from pathlib import Path
+import re
 
 # Load environment variables from parent directory
 load_dotenv(Path(__file__).parent.parent / '.env')
@@ -227,6 +228,9 @@ def run_experiment():
         # Calculate inference time
         inference_time = time.time() - start_time
         
+        # Extract annotations from model response
+        annotations = extract_annotations(model_response)
+        
         # Automatically save experiment to filesystem
         experiment_data = {
             'model': model,
@@ -234,6 +238,7 @@ def run_experiment():
             'description': description,
             'experiment_name': experiment_name,
             'model_response': model_response,
+            'annotations': annotations,
             'inference_time': inference_time,
             'timestamp': datetime.datetime.now().isoformat(),
             'prompt': prompt
@@ -245,6 +250,7 @@ def run_experiment():
         return jsonify({
             'success': True,
             'response': model_response,
+            'annotations': annotations,
             'prompt': prompt,
             'inference_time': inference_time,
             'auto_saved': True,
@@ -264,6 +270,7 @@ def save_experiment():
     prompt_template = data.get('prompt_template')
     description = data.get('description')
     model_response = data.get('model_response')
+    annotations = data.get('annotations', [])
     inference_time = data.get('inference_time')
     
     if not all([model, prompt_template, description, model_response]):
@@ -275,6 +282,7 @@ def save_experiment():
             'prompt_template': prompt_template,
             'description': description,
             'model_response': model_response,
+            'annotations': annotations,
             'inference_time': inference_time,
             'timestamp': datetime.datetime.now().isoformat()
         }
@@ -405,6 +413,12 @@ def update_experiment_name():
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+def extract_annotations(text):
+    """Extract text between --- ANNOTATION START --- and --- ANNOTATION END --- markers"""
+    pattern = r'--- ANNOTATION START ---\s*(.*?)\s*--- ANNOTATION END ---'
+    matches = re.findall(pattern, text, re.DOTALL)
+    return [match.strip() for match in matches if match.strip()]
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=3000)

@@ -244,6 +244,18 @@ async function viewExperiment(filename) {
                 <h6><i class="fas fa-reply"></i> Model Response</h6>
                 <pre>${experiment.model_response}</pre>
                 
+                ${experiment.annotations && experiment.annotations.length > 0 ? `
+                <h6><i class="fas fa-tags"></i> Extracted Annotations</h6>
+                <div class="bg-warning bg-opacity-10 p-3 rounded border border-warning">
+                    ${experiment.annotations.map((annotation, index) => `
+                        <div class="annotation-item mb-2 p-2 bg-white rounded border">
+                            <div class="fw-bold mb-1"><i class="fas fa-tag"></i> Annotation ${index + 1}:</div>
+                            <pre class="mb-0 text-dark" style="font-size: 0.9em;">${annotation}</pre>
+                        </div>
+                    `).join('')}
+                </div>
+                ` : ''}
+                
                 <h6><i class="fas fa-file-code"></i> Prompt Template</h6>
                 <pre>${experiment.prompt_template}</pre>
             </div>
@@ -328,6 +340,7 @@ async function runExperiment() {
             experiment_name: experimentName,
             experiment_id: result.experiment_id,
             model_response: result.response,
+            annotations: result.annotations,
             inference_time: result.inference_time,
             full_prompt: result.prompt,
             filename: result.filename
@@ -357,6 +370,38 @@ function displayResults(result, experimentName = '') {
     document.getElementById('modelResponse').textContent = result.response;
     document.getElementById('fullPrompt').textContent = result.prompt;
     
+    // Display extracted annotations
+    const annotationsSection = document.getElementById('annotationsSection');
+    const annotationsList = document.getElementById('annotationsList');
+    
+    if (result.annotations && result.annotations.length > 0) {
+        // Clear previous annotations
+        annotationsList.innerHTML = '';
+        
+        // Display each annotation
+        result.annotations.forEach((annotation, index) => {
+            const annotationDiv = document.createElement('div');
+            annotationDiv.className = 'annotation-item mb-2 p-2 bg-white rounded border';
+            
+            const header = document.createElement('div');
+            header.className = 'fw-bold mb-1';
+            header.innerHTML = `<i class="fas fa-tag"></i> Annotation ${index + 1}:`;
+            
+            const content = document.createElement('pre');
+            content.className = 'mb-0 text-dark';
+            content.style.fontSize = '0.9em';
+            content.textContent = annotation;
+            
+            annotationDiv.appendChild(header);
+            annotationDiv.appendChild(content);
+            annotationsList.appendChild(annotationDiv);
+        });
+        
+        annotationsSection.style.display = 'block';
+    } else {
+        annotationsSection.style.display = 'none';
+    }
+    
     // Display experiment name in the editable field
     document.getElementById('resultExperimentName').value = experimentName || '';
     
@@ -385,6 +430,7 @@ function displayResults(result, experimentName = '') {
 // Hide results
 function hideResults() {
     document.getElementById('resultsSection').style.display = 'none';
+    document.getElementById('annotationsSection').style.display = 'none';
 }
 
 // Legacy save experiment function (kept for compatibility but not used in UI)
