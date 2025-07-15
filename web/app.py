@@ -414,6 +414,61 @@ def update_experiment_name():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/api/save_api_key', methods=['POST'])
+def save_api_key():
+    """Save the GEMINI_API_KEY to .env file"""
+    data = request.json
+    api_key = data.get('api_key', '').strip()
+    
+    if not api_key:
+        return jsonify({'error': 'API key is required'}), 400
+    
+    try:
+        # Path to .env file in parent directory
+        env_path = Path(__file__).parent.parent / '.env'
+        
+        # Read existing .env content if it exists
+        existing_content = []
+        if env_path.exists():
+            with open(env_path, 'r') as f:
+                existing_content = f.readlines()
+        
+        # Check if GEMINI_API_KEY already exists and update it
+        key_updated = False
+        for i, line in enumerate(existing_content):
+            if line.strip().startswith('GEMINI_API_KEY='):
+                existing_content[i] = f'GEMINI_API_KEY={api_key}\n'
+                key_updated = True
+                break
+        
+        # If key doesn't exist, add it
+        if not key_updated:
+            existing_content.append(f'GEMINI_API_KEY={api_key}\n')
+        
+        # Write back to .env file
+        with open(env_path, 'w') as f:
+            f.writelines(existing_content)
+        
+        # Reload environment variables
+        load_dotenv(env_path)
+        
+        return jsonify({
+            'success': True,
+            'message': 'API key saved successfully'
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/check_api_key')
+def check_api_key():
+    """Check if GEMINI_API_KEY is set"""
+    api_key = os.getenv('GEMINI_API_KEY')
+    return jsonify({
+        'has_api_key': bool(api_key),
+        'key_preview': api_key[:10] + '...' if api_key else None
+    })
+
 def extract_annotations(text):
     """Extract text between --- ANNOTATION START --- and --- ANNOTATION END --- markers"""
     pattern = r'--- ANNOTATION START ---\s*(.*?)\s*--- ANNOTATION END ---'

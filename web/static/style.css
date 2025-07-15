@@ -360,3 +360,33 @@ pre {
     font-size: 0.85em;
     line-height: 1.4;
 }
+
+/* API Key Modal styling */
+#apiKeyModal .modal-dialog {
+    max-width: 500px;
+}
+
+#apiKeyModal .form-control {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+#apiKeyModal .alert {
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+#apiKeyModal .alert-info {
+    border-left: 4px solid #0dcaf0;
+}
+
+#apiKeyModal .alert-success {
+    border-left: 4px solid #198754;
+}
+
+#apiKeyModal .alert-warning {
+    border-left: 4px solid #ffc107;
+}
+
+#apiKeyModal .alert-danger {
+    border-left: 4px solid #dc3545;
+}

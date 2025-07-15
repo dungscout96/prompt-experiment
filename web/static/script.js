@@ -304,6 +304,24 @@ async function runExperiment() {
         return;
     }
     
+    // Check API key for Gemini models
+    if (model.startsWith('gemini')) {
+        try {
+            const keyResponse = await fetch('/api/check_api_key');
+            const keyResult = await keyResponse.json();
+            
+            if (!keyResult.has_api_key) {
+                showAlert('Gemini API key is required for this model. Please configure it first.', 'warning');
+                showApiKeyModal();
+                return;
+            }
+        } catch (error) {
+            console.error('Error checking API key:', error);
+            showAlert('Error checking API key. Please try again.', 'danger');
+            return;
+        }
+    }
+    
     // Show loading modal
     const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
     loadingModal.show();
@@ -682,6 +700,117 @@ function toggleRecentExperiments() {
         toggleBtn.innerHTML = '<i class="fas fa-eye"></i> Show';
     }
 }
+
+// API Key Management Functions
+async function showApiKeyModal() {
+    const modal = new bootstrap.Modal(document.getElementById('apiKeyModal'));
+    
+    // Check current API key status
+    await checkApiKeyStatus();
+    
+    modal.show();
+}
+
+async function checkApiKeyStatus() {
+    try {
+        const response = await fetch('/api/check_api_key');
+        const result = await response.json();
+        
+        const statusDiv = document.getElementById('apiKeyStatus');
+        const apiKeyInput = document.getElementById('apiKeyInput');
+        
+        // Only update UI if the modal elements exist (i.e., modal is being shown)
+        if (statusDiv && apiKeyInput) {
+            if (result.has_api_key) {
+                statusDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i>
+                        <strong>API Key Configured:</strong> ${result.key_preview}
+                    </div>
+                `;
+                apiKeyInput.placeholder = 'Enter new API key to replace existing one...';
+            } else {
+                statusDiv.innerHTML = `
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>No API Key Found:</strong> Please enter your Gemini API key below.
+                    </div>
+                `;
+                apiKeyInput.placeholder = 'Enter your Gemini API key here...';
+            }
+        }
+        
+        return result;
+    } catch (error) {
+        console.error('Error checking API key status:', error);
+        const statusDiv = document.getElementById('apiKeyStatus');
+        if (statusDiv) {
+            statusDiv.innerHTML = `
+                <div class="alert alert-danger">
+                    <i class="fas fa-times-circle"></i>
+                    <strong>Error:</strong> Unable to check API key status.
+                </div>
+            `;
+        }
+        return { has_api_key: false };
+    }
+}
+
+async function saveApiKey() {
+    const apiKey = document.getElementById('apiKeyInput').value.trim();
+    
+    if (!apiKey) {
+        showAlert('Please enter an API key.', 'warning');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/save_api_key', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                api_key: apiKey
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.error) {
+            showAlert(result.error, 'danger');
+            return;
+        }
+        
+        showAlert(result.message, 'success');
+        
+        // Close modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('apiKeyModal'));
+        modal.hide();
+        
+        // Clear the input
+        document.getElementById('apiKeyInput').value = '';
+        
+        // Refresh models list to include Gemini if it wasn't available before
+        loadModels();
+        
+    } catch (error) {
+        console.error('Error saving API key:', error);
+        showAlert('Error saving API key. Please try again.', 'danger');
+    }
+}
+
+// Toggle API key visibility
+document.addEventListener('DOMContentLoaded', function() {
+    const showApiKeyCheckbox = document.getElementById('showApiKey');
+    const apiKeyInput = document.getElementById('apiKeyInput');
+    
+    if (showApiKeyCheckbox && apiKeyInput) {
+        showApiKeyCheckbox.addEventListener('change', function() {
+            apiKeyInput.type = this.checked ? 'text' : 'password';
+        });
+    }
+});
 
 // Utility functions
 function formatTimestamp(timestamp) {
