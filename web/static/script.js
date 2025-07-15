@@ -1,6 +1,7 @@
 // Global variables
 let currentExperiment = null;
 let currentExperimentData = null;
+let currentVocabContent = null;
 
 // Default prompt template
 const DEFAULT_PROMPT_TEMPLATE = `
@@ -395,6 +396,145 @@ function resetForm() {
 function clearDescription() {
     document.getElementById('descriptionInput').value = '';
     document.getElementById('descriptionInput').focus();
+}
+
+// HED Vocabulary Editor Functions
+async function showVocabEditor() {
+    hideResults();
+    
+    const vocabSection = document.getElementById('vocabSection');
+    vocabSection.style.display = 'block';
+    
+    // Update navigation
+    updateNavigation('vocab');
+    
+    // Load vocabulary content
+    await loadVocabContent();
+    
+    // Scroll to vocab section
+    vocabSection.scrollIntoView({ behavior: 'smooth' });
+}
+
+async function loadVocabContent() {
+    try {
+        const response = await fetch('/api/hed_vocab');
+        const result = await response.json();
+        
+        if (result.error) {
+            showAlert(result.error, 'danger');
+            return;
+        }
+        
+        currentVocabContent = result.vocab;
+        document.getElementById('vocabEditor').value = result.vocab;
+        
+    } catch (error) {
+        console.error('Error loading vocabulary:', error);
+        showAlert('Error loading HED vocabulary. Please try again.', 'danger');
+    }
+}
+
+async function saveVocab() {
+    const vocabContent = document.getElementById('vocabEditor').value;
+    
+    if (!vocabContent.trim()) {
+        showAlert('Vocabulary content cannot be empty.', 'warning');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/hed_vocab', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                vocab: vocabContent
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.error) {
+            showAlert(result.error, 'danger');
+            return;
+        }
+        
+        currentVocabContent = vocabContent;
+        showAlert('HED vocabulary saved successfully!', 'success');
+        
+    } catch (error) {
+        console.error('Error saving vocabulary:', error);
+        showAlert('Error saving HED vocabulary. Please try again.', 'danger');
+    }
+}
+
+async function downloadVocab() {
+    try {
+        window.open('/api/download_hed_vocab', '_blank');
+    } catch (error) {
+        console.error('Error downloading vocabulary:', error);
+        showAlert('Error downloading HED vocabulary. Please try again.', 'danger');
+    }
+}
+
+async function reloadVocab() {
+    if (confirm('Are you sure you want to reload the vocabulary? Any unsaved changes will be lost.')) {
+        await loadVocabContent();
+        showAlert('HED vocabulary reloaded from file.', 'info');
+    }
+}
+
+function hideVocabEditor() {
+    document.getElementById('vocabSection').style.display = 'none';
+}
+
+// Check for unsaved vocabulary changes
+function hasUnsavedVocabChanges() {
+    const currentContent = document.getElementById('vocabEditor').value;
+    return currentVocabContent !== null && currentContent !== currentVocabContent;
+}
+
+// Warn user about unsaved changes
+window.addEventListener('beforeunload', function(e) {
+    if (hasUnsavedVocabChanges()) {
+        e.preventDefault();
+        e.returnValue = 'You have unsaved changes to the HED vocabulary. Are you sure you want to leave?';
+    }
+});
+
+// Navigation functions
+function showExperimentForm() {
+    hideResults();
+    hideVocabEditor();
+    
+    // Update navigation
+    document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+        link.classList.remove('active');
+    });
+    
+    // Show experiment form (it's always visible)
+    document.querySelector('.container .row').style.display = 'flex';
+}
+
+function updateNavigation(activeSection) {
+    document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+        link.classList.remove('active');
+    });
+    
+    if (activeSection === 'vocab') {
+        document.querySelector('a[href="#vocab"]').classList.add('active');
+    } else if (activeSection === 'experiments') {
+        document.querySelector('a[href="#experiments"]').classList.add('active');
+    }
+}
+
+// Navigation wrapper functions
+function showExperiments() {
+    hideResults();
+    hideVocabEditor();
+    updateNavigation('experiments');
+    loadExperiments();
 }
 
 // Utility functions

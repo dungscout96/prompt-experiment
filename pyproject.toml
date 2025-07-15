@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "flask>=3.0.0",
     "google-genai>=1.25.0",
     "hedtools>=0.5.0",
     "ipykernel>=6.29.5",

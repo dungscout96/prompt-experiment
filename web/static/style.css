@@ -262,3 +262,44 @@ pre {
 .form-text {
     margin-top: 0.25rem;
 }
+
+#vocabEditor {
+    font-family: 'Courier New', 'Monaco', monospace;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+}
+
+#vocabEditor:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    background-color: #fff;
+}
+
+#vocabSection {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.font-monospace {
+    font-family: 'Courier New', 'Monaco', monospace !important;
+}
+
+.alert {
+    margin-bottom: 1rem;
+}
+
+.alert ul {
+    padding-left: 1.2rem;
+}
+
+.alert ul li {
+    margin-bottom: 0.25rem;
+}
+
+.navbar-nav .nav-link.active {
+    color: #fff !important;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}

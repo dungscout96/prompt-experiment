@@ -20,6 +20,12 @@ def load_hed_vocab():
     with open(vocab_path, 'r') as file:
         return file.read()
 
+# Save HED vocabulary
+def save_hed_vocab(vocab_content):
+    vocab_path = Path(__file__).parent.parent / 'HED_vocab_reformatted.xml'
+    with open(vocab_path, 'w') as file:
+        file.write(vocab_content)
+
 # Default prompt template
 DEFAULT_PROMPT_TEMPLATE = '''
 You are an expert in converting natural language descriptions of events into structured annotations using a predefined Hierarchical Event Descriptor (HED) vocabulary. Your task is to extract relevant concepts from the input description and represent them as a comma-separated list of HED tags, strictly adhering to the provided vocabulary.
@@ -62,7 +68,7 @@ Description: The foreground view consists of a large number of ingestible object
 --- REASONING PROCESS END ---
 
 --- ANNOTATION START ---
-(Foreground-view, (Item-count, High), Ingestible-object), (Background-view, (Human, Body, Outdoors, Furnishing, Natural-feature, Urban, Man-made-object)
+(Foreground-view, (Item-count, High), Ingestible-object), (Background-view, (Human, Body, Outdoors, Furnishing, Natural-feature, Urban, Man-made-object))
 --- ANNOTATION END ---
 
 Description from user:
@@ -267,6 +273,46 @@ def get_descriptions():
         'description': desc,
         'count': count
     } for desc, count in sorted_descriptions])
+
+@app.route('/api/hed_vocab')
+def get_hed_vocab():
+    """Get the HED vocabulary content"""
+    try:
+        vocab_content = load_hed_vocab()
+        return jsonify({
+            'success': True,
+            'vocab': vocab_content
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/hed_vocab', methods=['POST'])
+def save_hed_vocab_endpoint():
+    """Save updated HED vocabulary content"""
+    data = request.json
+    vocab_content = data.get('vocab')
+    
+    if not vocab_content:
+        return jsonify({'error': 'Vocabulary content is required'}), 400
+    
+    try:
+        save_hed_vocab(vocab_content)
+        return jsonify({
+            'success': True,
+            'message': 'HED vocabulary saved successfully'
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/download_hed_vocab')
+def download_hed_vocab():
+    """Download the HED vocabulary file"""
+    vocab_path = Path(__file__).parent.parent / 'HED_vocab_reformatted.xml'
+    
+    if not vocab_path.exists():
+        return jsonify({'error': 'HED vocabulary file not found'}), 404
+    
+    return send_file(vocab_path, as_attachment=True, download_name='HED_vocab_reformatted.xml')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

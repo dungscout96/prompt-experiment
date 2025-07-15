@@ -19,8 +19,13 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#experiments" onclick="loadExperiments()">
+                        <a class="nav-link" href="#experiments" onclick="showExperiments()">
                             <i class="fas fa-history"></i> Experiments
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#vocab" onclick="showVocabEditor()">
+                            <i class="fas fa-book"></i> HED Vocabulary
                         </a>
                     </li>
                 </ul>
@@ -120,7 +125,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <h6>Model Response</h6>
-                                <pre id="modelResponse" class="bg-light p-3 rounded"></pre>
+                                <pre id="modelResponse" class="bg-light p-3 rounded" style="max-height: 400px; overflow-y: auto;"></pre>
                             </div>
                             <div class="col-md-6">
                                 <h6>Full Prompt</h6>
@@ -138,6 +143,72 @@
                                         <strong>Model:</strong>
                                         <span id="resultModel" class="badge bg-primary ms-2">-</span>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HED Vocabulary Editor Section -->
+        <div class="row mt-4" id="vocabSection" style="display: none;">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5><i class="fas fa-book"></i> HED Vocabulary Editor</h5>
+                        <div>
+                            <button class="btn btn-success btn-sm" onclick="saveVocab()">
+                                <i class="fas fa-save"></i> Save
+                            </button>
+                            <button class="btn btn-info btn-sm" onclick="downloadVocab()">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                            <button class="btn btn-warning btn-sm" onclick="reloadVocab()">
+                                <i class="fas fa-sync"></i> Reload
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm" onclick="hideVocabEditor()">
+                                <i class="fas fa-times"></i> Close
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label for="vocabEditor" class="form-label">
+                                    <strong>HED Vocabulary Content</strong>
+                                </label>
+                                <div>
+                                    <small class="text-muted">
+                                        <i class="fas fa-info-circle"></i> 
+                                        Edit the HED vocabulary XML content. Changes will be applied to all new experiments.
+                                    </small>
+                                </div>
+                            </div>
+                            <textarea class="form-control font-monospace" id="vocabEditor" rows="20" 
+                                      placeholder="Loading HED vocabulary..."></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="alert alert-info">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <strong>Tips:</strong>
+                                    <ul class="mb-0 mt-2">
+                                        <li>This is the XML schema that defines available HED tags</li>
+                                        <li>Changes will affect all future experiments</li>
+                                        <li>Save your changes before running experiments</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="alert alert-warning">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <strong>Warning:</strong>
+                                    <ul class="mb-0 mt-2">
+                                        <li>Invalid XML syntax may break experiments</li>
+                                        <li>Always test after making changes</li>
+                                        <li>Consider downloading a backup before editing</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
