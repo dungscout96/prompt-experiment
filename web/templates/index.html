@@ -50,6 +50,11 @@
                         <option value="">Select a model...</option>
                         </select>
                     </div>
+                    <div class="col-md-6">
+                        <label for="experimentName" class="form-label">Experiment Name</label>
+                        <input type="text" class="form-control" id="experimentName" 
+                               placeholder="Enter experiment name (optional)">
+                    </div>
                     </div>
                     <div class="row mb-3">
                     <div class="col-12">
@@ -119,6 +124,26 @@
                         </div>
                     </div>
                     <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <label for="resultExperimentName" class="form-label">
+                                    <strong>Experiment Name</strong>
+                                </label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="resultExperimentName" 
+                                           placeholder="Enter experiment name...">
+                                    <button class="btn btn-outline-primary" onclick="updateExperimentName()">
+                                        <i class="fas fa-save"></i> Update
+                                    </button>
+                                </div>
+                                <div class="form-text">
+                                    <small class="text-muted">
+                                        <i class="fas fa-info-circle"></i> 
+                                        You can edit the experiment name and it will be saved to the file
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <h6>Model Response</h6>

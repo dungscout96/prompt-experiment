@@ -143,6 +143,7 @@ async function loadExperiments() {
             <div class="experiment-item" onclick="viewExperiment('${exp.filename}')">
                 <div class="d-flex justify-content-between align-items-start">
                     <div class="flex-grow-1">
+                        ${exp.experiment_name ? `<div class="experiment-name fw-bold">${exp.experiment_name}</div>` : ''}
                         <div class="experiment-model">
                             <i class="fas fa-robot"></i> ${exp.model}
                             ${exp.inference_time ? `<span class="badge bg-info ms-2">${formatInferenceTime(exp.inference_time)}</span>` : ''}
@@ -213,6 +214,11 @@ async function viewExperiment(filename) {
         const modalBody = document.getElementById('experimentDetails');
         modalBody.innerHTML = `
             <div class="experiment-details">
+                ${experiment.experiment_name ? `
+                <h6><i class="fas fa-tag"></i> Experiment Name</h6>
+                <p class="fw-bold">${experiment.experiment_name}</p>
+                ` : ''}
+                
                 <h6><i class="fas fa-robot"></i> Model</h6>
                 <p><span class="badge bg-primary">${experiment.model}</span></p>
                 
@@ -273,6 +279,7 @@ async function runExperiment() {
     const model = document.getElementById('modelSelect').value;
     const description = document.getElementById('descriptionInput').value;
     const promptTemplate = document.getElementById('promptTemplate').value;
+    const experimentName = document.getElementById('experimentName').value;
     
     if (!model || !description || !promptTemplate) {
         showAlert('Please fill in all required fields.', 'warning');
@@ -292,7 +299,8 @@ async function runExperiment() {
             body: JSON.stringify({
                 model: model,
                 description: description,
-                prompt_template: promptTemplate
+                prompt_template: promptTemplate,
+                experiment_name: experimentName
             })
         });
         
@@ -311,9 +319,11 @@ async function runExperiment() {
             model: model,
             description: description,
             prompt_template: promptTemplate,
+            experiment_name: experimentName,
             model_response: result.response,
             inference_time: result.inference_time,
-            full_prompt: result.prompt
+            full_prompt: result.prompt,
+            filename: result.filename
         };
         
         // Show success message with auto-save info
@@ -339,6 +349,9 @@ async function runExperiment() {
 function displayResults(result) {
     document.getElementById('modelResponse').textContent = result.response;
     document.getElementById('fullPrompt').textContent = result.prompt;
+    
+    // Display experiment name in the editable field
+    document.getElementById('resultExperimentName').value = currentExperimentData.experiment_name || '';
     
     // Display inference time and model
     document.getElementById('inferenceTime').textContent = formatInferenceTime(result.inference_time);
@@ -396,6 +409,48 @@ async function saveExperiment() {
     } catch (error) {
         console.error('Error saving experiment:', error);
         showAlert('Error saving experiment. Please try again.', 'danger');
+    }
+}
+
+// Update experiment name
+async function updateExperimentName() {
+    const newName = document.getElementById('resultExperimentName').value;
+    
+    if (!currentExperimentData || !currentExperimentData.filename) {
+        showAlert('No experiment to update.', 'warning');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/update_experiment_name', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                filename: currentExperimentData.filename,
+                experiment_name: newName
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.error) {
+            showAlert(result.error, 'danger');
+            return;
+        }
+        
+        // Update the stored experiment data
+        currentExperimentData.experiment_name = newName;
+        
+        showAlert('Experiment name updated successfully!', 'success');
+        
+        // Reload experiments list to reflect the change
+        loadExperiments();
+        
+    } catch (error) {
+        console.error('Error updating experiment name:', error);
+        showAlert('Error updating experiment name. Please try again.', 'danger');
     }
 }
 

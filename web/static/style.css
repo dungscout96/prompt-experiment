@@ -322,3 +322,9 @@ pre {
     font-size: 0.75rem;
     vertical-align: middle;
 }
+
+.experiment-name {
+    font-size: 0.9rem;
+    color: #495057;
+    margin-bottom: 0.25rem;
+}

@@ -136,6 +136,7 @@ def get_experiments():
                         'model': data.get('model', 'Unknown'),
                         'timestamp': data.get('timestamp', 'Unknown'),
                         'inference_time': data.get('inference_time'),
+                        'experiment_name': data.get('experiment_name', ''),
                         'description': data.get('description', '')[:100] + '...' if len(data.get('description', '')) > 100 else data.get('description', '')
                     })
             except Exception as e:
@@ -167,6 +168,7 @@ def run_experiment():
     model = data.get('model', 'qwen3:8b')
     prompt_template = data.get('prompt_template', DEFAULT_PROMPT_TEMPLATE)
     description = data.get('description', '')
+    experiment_name = data.get('experiment_name', '')
     
     if not description:
         return jsonify({'error': 'Description is required'}), 400
@@ -209,6 +211,7 @@ def run_experiment():
             'model': model,
             'prompt_template': prompt_template,
             'description': description,
+            'experiment_name': experiment_name,
             'model_response': model_response,
             'inference_time': inference_time,
             'timestamp': datetime.datetime.now().isoformat(),
@@ -342,6 +345,43 @@ def download_hed_vocab():
         return jsonify({'error': 'HED vocabulary file not found'}), 404
     
     return send_file(vocab_path, as_attachment=True, download_name='HED_vocab_reformatted.xml')
+
+@app.route('/api/update_experiment_name', methods=['POST'])
+def update_experiment_name():
+    """Update the name of an existing experiment"""
+    data = request.json
+    
+    filename = data.get('filename')
+    new_name = data.get('experiment_name', '')
+    
+    if not filename:
+        return jsonify({'error': 'Filename is required'}), 400
+    
+    try:
+        experiments_dir = Path(__file__).parent.parent / 'prompt_experiments'
+        file_path = experiments_dir / filename
+        
+        if not file_path.exists():
+            return jsonify({'error': 'Experiment not found'}), 404
+        
+        # Load existing experiment data
+        with open(file_path, 'r') as f:
+            experiment_data = json.load(f)
+        
+        # Update the experiment name
+        experiment_data['experiment_name'] = new_name
+        
+        # Save updated data
+        with open(file_path, 'w') as f:
+            json.dump(experiment_data, f, indent=2)
+        
+        return jsonify({
+            'success': True,
+            'message': 'Experiment name updated successfully'
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
