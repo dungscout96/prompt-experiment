@@ -1,0 +1,1497 @@
+<hed_tags>
+   <tag name="Event">
+      <tag name="Sensory-event"/>
+      <tag name="Agent-action"/>
+      <tag name="Data-feature"/>
+      <tag name="Experiment-control"/>
+      <tag name="Experiment-procedure"/>
+      <tag name="Experiment-structure"/>
+      <tag name="Measurement-event"/>
+   </tag>
+   <tag name="Agent">
+      <tag name="Animal-agent"/>
+      <tag name="Avatar-agent"/>
+      <tag name="Controller-agent"/>
+      <tag name="Human-agent"/>
+      <tag name="Robotic-agent"/>
+      <tag name="Software-agent"/>
+   </tag>
+   <tag name="Action">
+      <tag name="Communicate">
+         <tag name="Communicate-gesturally">
+            <tag name="Clap-hands"/>
+            <tag name="Clear-throat"/>
+            <tag name="Frown"/>
+            <tag name="Grimace"/>
+            <tag name="Nod-head"/>
+            <tag name="Pump-fist"/>
+            <tag name="Raise-eyebrows"/>
+            <tag name="Shake-fist"/>
+            <tag name="Shake-head"/>
+            <tag name="Shhh"/>
+            <tag name="Shrug"/>
+            <tag name="Smile"/>
+            <tag name="Spread-hands"/>
+            <tag name="Thumb-up"/>
+            <tag name="Thumbs-down"/>
+            <tag name="Wave"/>
+            <tag name="Widen-eyes"/>
+            <tag name="Wink"/>
+         </tag>
+         <tag name="Communicate-musically">
+            <tag name="Hum"/>
+            <tag name="Play-instrument"/>
+            <tag name="Sing"/>
+            <tag name="Vocalize"/>
+            <tag name="Whistle"/>
+         </tag>
+         <tag name="Communicate-vocally">
+            <tag name="Cry"/>
+            <tag name="Groan"/>
+            <tag name="Laugh"/>
+            <tag name="Scream"/>
+            <tag name="Shout"/>
+            <tag name="Sigh"/>
+            <tag name="Speak"/>
+            <tag name="Whisper"/>
+         </tag>
+      </tag>
+      <tag name="Move">
+         <tag name="Breathe">
+            <tag name="Blow"/>
+            <tag name="Cough"/>
+            <tag name="Exhale"/>
+            <tag name="Hiccup"/>
+            <tag name="Hold-breath"/>
+            <tag name="Inhale"/>
+            <tag name="Sneeze"/>
+            <tag name="Sniff"/>
+         </tag>
+         <tag name="Move-body">
+            <tag name="Bend"/>
+            <tag name="Dance"/>
+            <tag name="Fall-down"/>
+            <tag name="Flex"/>
+            <tag name="Jerk"/>
+            <tag name="Lie-down"/>
+            <tag name="Recover-balance"/>
+            <tag name="Shudder"/>
+            <tag name="Sit-down"/>
+            <tag name="Sit-up"/>
+            <tag name="Stand-up"/>
+            <tag name="Stretch"/>
+            <tag name="Stumble"/>
+            <tag name="Turn"/>
+         </tag>
+         <tag name="Move-body-part">
+            <tag name="Move-eyes">
+               <tag name="Blink"/>
+               <tag name="Close-eyes"/>
+               <tag name="Fixate"/>
+               <tag name="Inhibit-blinks"/>
+               <tag name="Open-eyes"/>
+               <tag name="Saccade"/>
+               <tag name="Squint"/>
+               <tag name="Stare"/>
+            </tag>
+            <tag name="Move-face">
+               <tag name="Bite"/>
+               <tag name="Burp"/>
+               <tag name="Chew"/>
+               <tag name="Gurgle"/>
+               <tag name="Swallow">
+                  <tag name="Gulp"/>
+               </tag>
+               <tag name="Yawn"/>
+            </tag>
+            <tag name="Move-head">
+               <tag name="Lift-head"/>
+               <tag name="Lower-head"/>
+               <tag name="Turn-head"/>
+            </tag>
+            <tag name="Move-lower-extremity">
+               <tag name="Curl-toes"/>
+               <tag name="Hop"/>
+               <tag name="Jog"/>
+               <tag name="Jump"/>
+               <tag name="Kick"/>
+               <tag name="Pedal"/>
+               <tag name="Press-foot"/>
+               <tag name="Run"/>
+               <tag name="Step">
+                  <tag name="Heel-strike"/>
+                  <tag name="Toe-off"/>
+               </tag>
+               <tag name="Trot"/>
+               <tag name="Walk"/>
+            </tag>
+            <tag name="Move-torso"/>
+            <tag name="Move-upper-extremity">
+               <tag name="Drop"/>
+               <tag name="Grab"/>
+               <tag name="Grasp"/>
+               <tag name="Hold-down"/>
+               <tag name="Lift"/>
+               <tag name="Make-fist"/>
+               <tag name="Point"/>
+               <tag name="Press"/>
+               <tag name="Push"/>
+               <tag name="Reach"/>
+               <tag name="Release"/>
+               <tag name="Retract"/>
+               <tag name="Scratch"/>
+               <tag name="Snap-fingers"/>
+               <tag name="Touch"/>
+            </tag>
+         </tag>
+      </tag>
+      <tag name="Perceive">
+         <tag name="Hear"/>
+         <tag name="See"/>
+         <tag name="Sense-by-touch"/>
+         <tag name="Smell"/>
+         <tag name="Taste"/>
+      </tag>
+      <tag name="Perform">
+         <tag name="Close"/>
+         <tag name="Collide-with"/>
+         <tag name="Halt"/>
+         <tag name="Modify"/>
+         <tag name="Open"/>
+         <tag name="Operate"/>
+         <tag name="Play"/>
+         <tag name="Read"/>
+         <tag name="Repeat"/>
+         <tag name="Rest"/>
+         <tag name="Ride"/>
+         <tag name="Write"/>
+      </tag>
+      <tag name="Think">
+         <tag name="Allow"/>
+         <tag name="Attend-to"/>
+         <tag name="Count"/>
+         <tag name="Deny"/>
+         <tag name="Detect"/>
+         <tag name="Discriminate"/>
+         <tag name="Encode"/>
+         <tag name="Evade"/>
+         <tag name="Generate"/>
+         <tag name="Identify"/>
+         <tag name="Imagine"/>
+         <tag name="Judge"/>
+         <tag name="Learn"/>
+         <tag name="Memorize"/>
+         <tag name="Plan"/>
+         <tag name="Predict"/>
+         <tag name="Recall"/>
+         <tag name="Recognize"/>
+         <tag name="Respond"/>
+         <tag name="Switch-attention"/>
+         <tag name="Track"/>
+      </tag>
+   </tag>
+   <tag name="Item">
+      <tag name="Biological-item">
+         <tag name="Anatomical-item">
+            <tag name="Body"/>
+            <tag name="Body-part">
+               <tag name="Head"/>
+               <tag name="Head-part">
+                  <tag name="Brain"/>
+                  <tag name="Brain-region">
+                     <tag name="Cerebellum"/>
+                     <tag name="Frontal-lobe"/>
+                     <tag name="Occipital-lobe"/>
+                     <tag name="Parietal-lobe"/>
+                     <tag name="Temporal-lobe"/>
+                  </tag-
+                  <tag name="Ear"/>
+                  <tag name="Face"/>
+                  <tag name="Face-part">
+                     <tag name="Cheek"/>
+                     <tag name="Chin"/>
+                     <tag name="Eye"/>
+                     <tag name="Eyebrow"/>
+                     <tag name="Eyelid"/>
+                     <tag name="Forehead"/>
+                     <tag name="Lip"/>
+                     <tag name="Mouth"/>
+                     <tag name="Mouth-part">
+                        <tag name="Teeth"/>
+                        <tag name="Tongue"/>
+                     </tag>
+                     <tag name="Nose"/>
+                  </tag>
+                  <tag name="Hair"/>
+               </tag>
+               <tag name="Lower-extremity"/>
+               <tag name="Lower-extremity-part">
+                  <tag name="Ankle"/>
+                  <tag name="Foot"/>
+                  <tag name="Foot-part">
+                     <tag name="Heel"/>
+                     <tag name="Instep"/>
+                     <tag name="Toe">
+                        <tag name="Big-toe"/>
+                        <tag name="Little-toe"/>
+                     </tag>
+                     <tag name="Toes"/>
+                  </tag>
+                  <tag name="Knee"/>
+                  <tag name="Lower-leg"/>
+                  <tag name="Lower-leg-part">
+                     <tag name="Calf"/>
+                     <tag name="Shin"/>
+                  </tag>
+                  <tag name="Upper-leg"/>
+                  <tag name="Upper-leg-part">
+                     <tag name="Thigh"/>
+                  </tag>
+               </tag>
+               <tag name="Neck"/>
+               <tag name="Torso"/>
+               <tag name="Torso-part">
+                  <tag name="Abdomen"/>
+                  <tag name="Navel"/>
+                  <tag name="Pelvis"/>
+                  <tag name="Pelvis-part">
+                     <tag name="Buttocks"/>
+                     <tag name="Genitalia"/>
+                     <tag name="Gentalia"/>
+                     <tag name="Hip"/>
+                  </tag>
+                  <tag name="Torso-back"/>
+                  <tag name="Torso-chest"/>
+                  <tag name="Viscera"/>
+                  <tag name="Waist"/>
+               </tag>
+               <tag name="Upper-extremity"/>
+               <tag name="Upper-extremity-part">
+                  <tag name="Elbow"/>
+                  <tag name="Forearm"/>
+                  <tag name="Forearm-part"/>
+                  <tag name="Hand"/>
+                  <tag name="Hand-part">
+                     <tag name="Finger">
+                        <tag name="Index-finger"/>
+                        <tag name="Little-finger"/>
+                        <tag name="Middle-finger"/>
+                        <tag name="Ring-finger"/>
+                        <tag name="Thumb"/>
+                     </tag>
+                     <tag name="Fingers"/>
+                     <tag name="Knuckles"/>
+                     <tag name="Palm"/>
+                  </tag>
+                  <tag name="Shoulder"/>
+                  <tag name="Upper-arm"/>
+                  <tag name="Upper-arm-part"/>
+                  <tag name="Wrist"/>
+               </tag>
+            </tag>
+         </tag>
+         <tag name="Organism">
+            <tag name="Animal"/>
+            <tag name="Human"/>
+            <tag name="Plant"/>
+         </tag>
+      </tag>
+      <tag name="Language-item">
+         <tag name="Character"/>
+         <tag name="Clause"/>
+         <tag name="Glyph"/>
+         <tag name="Nonword"/>
+         <tag name="Paragraph"/>
+         <tag name="Phoneme"/>
+         <tag name="Phrase"/>
+         <tag name="Pseudoword"/>
+         <tag name="Sentence"/>
+         <tag name="Syllable"/>
+         <tag name="Textblock"/>
+         <tag name="Word"/>
+      </tag>
+      <tag name="Object">
+         <tag name="Geometric-object">
+            <tag name="2D-shape">
+               <tag name="Arrow"/>
+               <tag name="Clockface"/>
+               <tag name="Cross"/>
+               <tag name="Dash"/>
+               <tag name="Ellipse">
+                  <tag name="Circle"/>
+               </tag>
+               <tag name="Rectangle">
+                  <tag name="Square"/>
+               </tag>
+               <tag name="Single-point"/>
+               <tag name="Star"/>
+               <tag name="Triangle"/>
+            </tag>
+            <tag name="3D-shape">
+               <tag name="Box">
+                  <tag name="Cube"/>
+               </tag>
+               <tag name="Cone"/>
+               <tag name="Cylinder"/>
+               <tag name="Ellipsoid">
+                  <tag name="Sphere"/>
+               </tag>
+               <tag name="Pyramid"/>
+            </tag>
+            <tag name="Pattern">
+               <tag name="Dots"/>
+               <tag name="LED-pattern"/>
+            </tag>
+         </tag>
+         <tag name="Ingestible-object"/>
+         <tag name="Man-made-object">
+            <tag name="Building"/>
+            <tag name="Building-part">
+               <tag name="Attic"/>
+               <tag name="Basement"/>
+               <tag name="Door"/>
+               <tag name="Entrance"/>
+               <tag name="Roof"/>
+               <tag name="Room"/>
+               <tag name="Window"/>
+            </tag>
+            <tag name="Clothing"/>
+            <tag name="Device">
+               <tag name="Assistive-device">
+                  <tag name="Glasses"/>
+                  <tag name="Writing-device">
+                     <tag name="Pen"/>
+                     <tag name="Pencil"/>
+                  </tag>
+               </tag>
+               <tag name="Computing-device">
+                  <tag name="Cellphone"/>
+                  <tag name="Desktop-computer"/>
+                  <tag name="Laptop-computer"/>
+                  <tag name="Tablet-computer"/>
+               </tag>
+               <tag name="Engine"/>
+               <tag name="IO-device">
+                  <tag name="Input-device">
+                     <tag name="Computer-mouse">
+                        <tag name="Mouse-button"/>
+                        <tag name="Scroll-wheel"/>
+                     </tag>
+                     <tag name="Joystick"/>
+                     <tag name="Keyboard">
+                        <tag name="Keyboard-key">
+                           <tag name="#"/>
+                        </tag>
+                     </tag>
+                     <tag name="Keypad">
+                        <tag name="Keypad-key">
+                           <tag name="#"/>
+                        </tag>
+                     </tag>
+                     <tag name="Microphone"/>
+                     <tag name="Push-button"/>
+                  </tag>
+                  <tag name="Output-device">
+                     <tag name="Auditory-device">
+                        <tag name="Headphones"/>
+                        <tag name="Loudspeaker"/>
+                     </tag>
+                     <tag name="Display-device">
+                        <tag name="Computer-screen"/>
+                        <tag name="Head-mounted-display"/>
+                        <tag name="LED-display"/>
+                        <tag name="Screen-window"/>
+                     </tag>
+                     <tag name="Recording-device">
+                        <tag name="EEG-recorder"/>
+                        <tag name="EMG-recorder"/>
+                        <tag name="File-storage"/>
+                        <tag name="MEG-recorder"/>
+                        <tag name="Motion-capture"/>
+                        <tag name="Tape-recorder"/>
+                     </tag>
+                  </tag>
+                  <tag name="Touchscreen"/>
+               </tag>
+               <tag name="Machine"/>
+               <tag name="Measurement-device">
+                  <tag name="Clock"/>
+               </tag>
+               <tag name="Robot"/>
+               <tag name="Tool"/>
+            </tag>
+            <tag name="Document">
+               <tag name="Book"/>
+               <tag name="Letter"/>
+               <tag name="Note"/>
+               <tag name="Notebook"/>
+               <tag name="Questionnaire"/>
+            </tag>
+            <tag name="Furnishing"/>
+            <tag name="Manufactured-material">
+               <tag name="Ceramic"/>
+               <tag name="Glass"/>
+               <tag name="Paper"/>
+               <tag name="Plastic"/>
+               <tag name="Steel"/>
+            </tag>
+            <tag name="Media">
+               <tag name="Media-clip">
+                  <tag name="Audio-clip"/>
+                  <tag name="Audiovisual-clip"/>
+                  <tag name="Video-clip"/>
+               </tag>
+               <tag name="Visualization">
+                  <tag name="Animation"/>
+                  <tag name="Art-installation"/>
+                  <tag name="Braille"/>
+                  <tag name="Image">
+                     <tag name="Cartoon"/>
+                     <tag name="Drawing"/>
+                     <tag name="Icon"/>
+                     <tag name="Painting"/>
+                     <tag name="Photograph"/>
+                  </tag>
+                  <tag name="Movie"/>
+                  <tag name="Outline-visualization"/>
+                  <tag name="Point-light-visualization"/>
+                  <tag name="Sculpture"/>
+                  <tag name="Stick-figure-visualization"/>
+               </tag>
+            </tag>
+            <tag name="Navigational-object">
+               <tag name="Path"/>
+               <tag name="Road">
+                  <tag name="Lane"/>
+               </tag>
+               <tag name="Runway"/>
+            </tag>
+            <tag name="Vehicle">
+               <tag name="Aircraft"/>
+               <tag name="Bicycle"/>
+               <tag name="Boat"/>
+               <tag name="Car"/>
+               <tag name="Cart"/>
+               <tag name="Tractor"/>
+               <tag name="Train"/>
+               <tag name="Truck"/>
+            </tag>
+         </tag>
+         <tag name="Natural-object">
+            <tag name="Mineral"/>
+            <tag name="Natural-feature">
+               <tag name="Field"/>
+               <tag name="Hill"/>
+               <tag name="Mountain"/>
+               <tag name="River"/>
+               <tag name="Waterfall"/>
+            </tag>
+         </tag>
+      </tag>
+      <tag name="Sound">
+         <tag name="Environmental-sound">
+            <tag name="Crowd-sound"/>
+            <tag name="Signal-noise"/>
+         </tag>
+         <tag name="Musical-sound">
+            <tag name="Instrument-sound"/>
+            <tag name="Tone"/>
+            <tag name="Vocalized-sound"/>
+            <tag name="Whistle"/>
+         </tag>
+         <tag name="Named-animal-sound">
+            <tag name="Barking"/>
+            <tag name="Bleating"/>
+            <tag name="Chirping"/>
+            <tag name="Crowing"/>
+            <tag name="Growling"/>
+            <tag name="Meowing"/>
+            <tag name="Mooing"/>
+            <tag name="Purring"/>
+            <tag name="Roaring"/>
+            <tag name="Squawking"/>
+         </tag>
+         <tag name="Named-object-sound">
+            <tag name="Alarm-sound"/>
+            <tag name="Beep"/>
+            <tag name="Buzz"/>
+            <tag name="Click"/>
+            <tag name="Ding"/>
+            <tag name="Horn-blow"/>
+            <tag name="Ka-ching"/>
+            <tag name="Siren"/>
+         </tag>
+      </tag>
+   </tag>
+   <tag name="Property">
+      <tag name="Agent-property">
+         <tag name="Agent-state">
+            <tag name="Agent-cognitive-state">
+               <tag name="Alert"/>
+               <tag name="Anesthetized"/>
+               <tag name="Asleep"/>
+               <tag name="Attentive"/>
+               <tag name="Awake"/>
+               <tag name="Brain-dead"/>
+               <tag name="Comatose"/>
+               <tag name="Distracted"/>
+               <tag name="Drowsy"/>
+               <tag name="Intoxicated"/>
+               <tag name="Locked-in"/>
+               <tag name="Passive"/>
+               <tag name="Resting"/>
+               <tag name="Vegetative"/>
+            </tag>
+            <tag name="Agent-emotional-state">
+               <tag name="Angry"/>
+               <tag name="Aroused"/>
+               <tag name="Awed"/>
+               <tag name="Compassionate"/>
+               <tag name="Content"/>
+               <tag name="Disgusted"/>
+               <tag name="Emotionally-neutral"/>
+               <tag name="Empathetic"/>
+               <tag name="Excited"/>
+               <tag name="Fearful"/>
+               <tag name="Frustrated"/>
+               <tag name="Grieving"/>
+               <tag name="Happy"/>
+               <tag name="Jealous"/>
+               <tag name="Joyful"/>
+               <tag name="Loving"/>
+               <tag name="Relieved"/>
+               <tag name="Sad"/>
+               <tag name="Stressed"/>
+            </tag>
+            <tag name="Agent-physiological-state">
+               <tag name="Catamenial"/>
+               <tag name="Fever"/>
+               <tag name="Healthy"/>
+               <tag name="Hungry"/>
+               <tag name="Rested"/>
+               <tag name="Sated"/>
+               <tag name="Sick"/>
+               <tag name="Thirsty"/>
+               <tag name="Tired"/>
+            </tag>
+            <tag name="Agent-postural-state">
+               <tag name="Crouching"/>
+               <tag name="Eyes-closed"/>
+               <tag name="Eyes-open"/>
+               <tag name="Kneeling"/>
+               <tag name="On-treadmill"/>
+               <tag name="Prone"/>
+               <tag name="Seated-with-chin-rest"/>
+               <tag name="Sitting"/>
+               <tag name="Standing"/>
+            </tag>
+         </tag>
+         <tag name="Agent-task-role">
+            <tag name="Experiment-actor"/>
+            <tag name="Experiment-controller"/>
+            <tag name="Experiment-participant"/>
+            <tag name="Experimenter"/>
+         </tag>
+         <tag name="Agent-trait">
+            <tag name="Age">
+               <tag name="#"/>
+            </tag>
+            <tag name="Agent-experience-level">
+               <tag name="Expert-level"/>
+               <tag name="Intermediate-experience-level"/>
+               <tag name="Novice-level"/>
+            </tag>
+            <tag name="Ethnicity"/>
+            <tag name="Gender"/>
+            <tag name="Handedness">
+               <tag name="Ambidextrous"/>
+               <tag name="Left-handed"/>
+               <tag name="Right-handed"/>
+            </tag>
+            <tag name="Race"/>
+            <tag name="Sex">
+               <tag name="Female"/>
+               <tag name="Intersex"/>
+               <tag name="Male"/>
+               <tag name="Other-sex"/>
+            </tag>
+         </tag>
+      </tag>
+      <tag name="Data-property">
+         <tag name="Data-artifact">
+            <tag name="Biological-artifact">
+               <tag name="Chewing-artifact"/>
+               <tag name="ECG-artifact"/>
+               <tag name="EMG-artifact"/>
+               <tag name="Eye-artifact">
+                  <tag name="Eye-blink-artifact"/>
+                  <tag name="Eye-movement-artifact">
+                     <tag name="Horizontal-eye-movement-artifact"/>
+                     <tag name="Nystagmus-artifact"/>
+                     <tag name="Slow-eye-movement-artifact"/>
+                     <tag name="Vertical-eye-movement-artifact"/>
+                  </tag>
+               </tag>
+               <tag name="Movement-artifact"/>
+               <tag name="Pulse-artifact"/>
+               <tag name="Respiration-artifact"/>
+               <tag name="Rocking-patting-artifact"/>
+               <tag name="Sucking-artifact"/>
+               <tag name="Sweat-artifact"/>
+               <tag name="Tongue-movement-artifact"/>
+            </tag>
+            <tag name="Nonbiological-artifact">
+               <tag name="Artificial-ventilation-artifact"/>
+               <tag name="Dialysis-artifact"/>
+               <tag name="Electrode-movement-artifact"/>
+               <tag name="Electrode-pops-artifact"/>
+               <tag name="Induction-artifact"/>
+               <tag name="Line-noise-artifact">
+                  <tag name="#"/>
+               </tag>
+               <tag name="Salt-bridge-artifact"/>
+            </tag>
+         </tag>
+         <tag name="Data-marker">
+            <tag name="Data-break-marker"/>
+            <tag name="Temporal-marker">
+               <tag name="Inset"/>
+               <tag name="Offset"/>
+               <tag name="Onset"/>
+               <tag name="Pause"/>
+               <tag name="Time-out"/>
+               <tag name="Time-sync"/>
+            </tag>
+         </tag>
+         <tag name="Data-resolution">
+            <tag name="Printer-resolution">
+               <tag name="#"/>
+            </tag>
+            <tag name="Screen-resolution">
+               <tag name="#"/>
+            </tag>
+            <tag name="Sensory-resolution">
+               <tag name="#"/>
+            </tag>
+            <tag name="Spatial-resolution">
+               <tag name="#"/>
+            </tag>
+            <tag name="Spectral-resolution">
+               <tag name="#"/>
+            </tag>
+            <tag name="Temporal-resolution">
+               <tag name="#"/>
+            </tag>
+         </tag>
+         <tag name="Data-source-type">
+            <tag name="Computed-feature"/>
+            <tag name="Computed-prediction"/>
+            <tag name="Expert-annotation"/>
+            <tag name="Instrument-measurement"/>
+            <tag name="Observation"/>
+         </tag>
+         <tag name="Data-value">
+            <tag name="Categorical-value">
+               <tag name="Categorical-class-value">
+                  <tag name="All"/>
+                  <tag name="Correct"/>
+                  <tag name="Explicit"/>
+                  <tag name="False"/>
+                  <tag name="Implicit"/>
+                  <tag name="Invalid"/>
+                  <tag name="None"/>
+                  <tag name="Some"/>
+                  <tag name="True"/>
+                  <tag name="Unknown"/>
+                  <tag name="Valid"/>
+                  <tag name="Wrong"/>
+               </tag>
+               <tag name="Categorical-judgment-value">
+                  <tag name="Abnormal"/>
+                  <tag name="Asymmetrical"/>
+                  <tag name="Audible"/>
+                  <tag name="Complex"/>
+                  <tag name="Congruent"/>
+                  <tag name="Constrained"/>
+                  <tag name="Disordered"/>
+                  <tag name="Familiar"/>
+                  <tag name="Famous"/>
+                  <tag name="Inaudible"/>
+                  <tag name="Incongruent"/>
+                  <tag name="Involuntary"/>
+                  <tag name="Masked"/>
+                  <tag name="Normal"/>
+                  <tag name="Ordered"/>
+                  <tag name="Simple"/>
+                  <tag name="Symmetrical"/>
+                  <tag name="Unconstrained"/>
+                  <tag name="Unfamiliar"/>
+                  <tag name="Unmasked"/>
+                  <tag name="Voluntary"/>
+               </tag>
+               <tag name="Categorical-level-value">
+                  <tag name="Cold"/>
+                  <tag name="Deep"/>
+                  <tag name="High"/>
+                  <tag name="Hot"/>
+                  <tag name="Large"/>
+                  <tag name="Liminal"/>
+                  <tag name="Loud"/>
+                  <tag name="Low"/>
+                  <tag name="Medium"/>
+                  <tag name="Negative"/>
+                  <tag name="Positive"/>
+                  <tag name="Quiet"/>
+                  <tag name="Rough"/>
+                  <tag name="Shallow"/>
+                  <tag name="Small"/>
+                  <tag name="Smooth"/>
+                  <tag name="Subliminal"/>
+                  <tag name="Supraliminal"/>
+                  <tag name="Thick"/>
+                  <tag name="Thin"/>
+               </tag>
+               <tag name="Categorical-location-value">
+                  <tag name="Anterior"/>
+                  <tag name="Lateral"/>
+                  <tag name="Left"/>
+                  <tag name="Medial"/>
+                  <tag name="Posterior"/>
+                  <tag name="Right"/>
+               </tag>
+               <tag name="Categorical-orientation-value">
+                  <tag name="Backward"/>
+                  <tag name="Downward"/>
+                  <tag name="Forward"/>
+                  <tag name="Horizontally-oriented"/>
+                  <tag name="Leftward"/>
+                  <tag name="Oblique"/>
+                  <tag name="Rightward"/>
+                  <tag name="Rotated"/>
+                  <tag name="Upward"/>
+                  <tag name="Vertically-oriented"/>
+               </tag>
+            </tag>
+            <tag name="Physical-value">
+               <tag name="Temperature">
+                  <tag name="#"/>
+               </tag>
+               <tag name="Weight">
+                  <tag name="#"/>
+               </tag>
+            </tag>
+            <tag name="Quantitative-value">
+               <tag name="Fraction">
+                  <tag name="#"/>
+               </tag>
+               <tag name="Item-count">
+                  <tag name="#"/>
+               </tag>
+               <tag name="Item-index">
+                  <tag name="#"/>
+               </tag>
+               <tag name="Item-interval">
+                  <tag name="#"/>
+               </tag>
+               <tag name="Percentage">
+                  <tag name="#"/>
+               </tag>
+               <tag name="Ratio">
+                  <tag name="#"/>
+               </tag>
+            </tag>
+            <tag name="Spatiotemporal-value">
+               <tag name="Rate-of-change">
+                  <tag name="Acceleration">
+                     <tag name="#"/>
+                  </tag>
+                  <tag name="Frequency">
+                     <tag name="#"/>
+                  </tag>
+                  <tag name="Jerk-rate">
+                     <tag name="#"/>
+                  </tag>
+                  <tag name="Refresh-rate">
+                     <tag name="#"/>
+                  </tag>
+                  <tag name="Sampling-rate">
+                     <tag name="#"/>
+                  </tag>
+                  <tag name="Speed">
+                     <tag name="#"/>
+                  </tag>
+                  <tag name="Temporal-rate">
+                     <tag name="#"/>
+                  </tag>
+               </tag>
+               <tag name="Spatial-value">
+                  <tag name="Angle">
+                     <tag name="#"/>
+                  </tag>
+                  <tag name="Distance">
+                     <tag name="#"/>
+                  </tag>
+                  <tag name="Position">
+                     <tag name="Clock-face">
+                        <tag name="#"/>
+                     </tag>
+                     <tag name="Clock-face-position">
+                        <tag name="#"/>
+                     </tag>
+                     <tag name="X-position">
+                        <tag name="#"/>
+                     </tag>
+                     <tag name="Y-position">
+                        <tag name="#"/>
+                     </tag>
+                     <tag name="Z-position">
+                        <tag name="#"/>
+                     </tag>
+                  </tag>
+                  <tag name="Size">
+                     <tag name="Area">
+                        <tag name="#"/>
+                     </tag>
+                     <tag name="Depth">
+                        <tag name="#"/>
+                     </tag>
+                     <tag name="Height">
+                        <tag name="#"/>
+                     </tag>
+                     <tag name="Length">
+                        <tag name="#"/>
+                     </tag>
+                     <tag name="Perimeter">
+                        <tag name="#"/>
+                     </tag>
+                     <tag name="Radius">
+                        <tag name="#"/>
+                     </tag>
+                     <tag name="Volume">
+                        <tag name="#"/>
+                     </tag>
+                     <tag name="Width">
+                        <tag name="#"/>
+                     </tag>
+                  </tag>
+               </tag>
+               <tag name="Temporal-value">
+                  <tag name="Delay">
+                     <tag name="#"/>
+                  </tag>
+                  <tag name="Duration">
+                     <tag name="#"/>
+                  </tag>
+                  <tag name="Time-interval">
+                     <tag name="#"/>
+                  </tag>
+                  <tag name="Time-value">
+                     <tag name="#"/>
+                  </tag>
+               </tag>
+            </tag>
+            <tag name="Statistical-value">
+               <tag name="Data-maximum">
+                  <tag name="#"/>
+               </tag>
+               <tag name="Data-mean">
+                  <tag name="#"/>
+               </tag>
+               <tag name="Data-median">
+                  <tag name="#"/>
+               </tag>
+               <tag name="Data-minimum">
+                  <tag name="#"/>
+               </tag>
+               <tag name="Probability">
+                  <tag name="#"/>
+               </tag>
+               <tag name="Standard-deviation">
+                  <tag name="#"/>
+               </tag>
+               <tag name="Statistical-accuracy">
+                  <tag name="#"/>
+               </tag>
+               <tag name="Statistical-precision">
+                  <tag name="#"/>
+               </tag>
+               <tag name="Statistical-recall">
+                  <tag name="#"/>
+               </tag>
+               <tag name="Statistical-uncertainty">
+                  <tag name="#"/>
+               </tag>
+            </tag>
+         </tag>
+         <tag name="Data-variability-attribute">
+            <tag name="Abrupt"/>
+            <tag name="Constant"/>
+            <tag name="Continuous"/>
+            <tag name="Decreasing"/>
+            <tag name="Deterministic"/>
+            <tag name="Discontinuous"/>
+            <tag name="Discrete"/>
+            <tag name="Estimated-value"/>
+            <tag name="Exact-value"/>
+            <tag name="Flickering"/>
+            <tag name="Fractal"/>
+            <tag name="Increasing"/>
+            <tag name="Random"/>
+            <tag name="Repetitive"/>
+            <tag name="Stochastic"/>
+            <tag name="Varying"/>
+         </tag>
+      </tag>
+      <tag name="Environmental-property">
+         <tag name="Augmented-reality"/>
+         <tag name="Indoors"/>
+         <tag name="Motion-platform"/>
+         <tag name="Outdoors"/>
+         <tag name="Real-world"/>
+         <tag name="Rural"/>
+         <tag name="Terrain">
+            <tag name="Composite-terrain"/>
+            <tag name="Dirt-terrain"/>
+            <tag name="Grassy-terrain"/>
+            <tag name="Gravel-terrain"/>
+            <tag name="Leaf-covered-terrain"/>
+            <tag name="Muddy-terrain"/>
+            <tag name="Paved-terrain"/>
+            <tag name="Rocky-terrain"/>
+            <tag name="Sloped-terrain"/>
+            <tag name="Uneven-terrain"/>
+         </tag>
+         <tag name="Urban"/>
+         <tag name="Virtual-world"/>
+      </tag>
+      <tag name="Informational-property">
+         <tag name="Description">
+            <tag name="#"/>
+         </tag>
+         <tag name="ID">
+            <tag name="#"/>
+         </tag>
+         <tag name="Label">
+            <tag name="#"/>
+         </tag>
+         <tag name="Metadata">
+            <tag name="Creation-date">
+               <tag name="#"/>
+            </tag>
+            <tag name="Experimental-note">
+               <tag name="#"/>
+            </tag>
+            <tag name="Library-name">
+               <tag name="#"/>
+            </tag>
+            <tag name="Metadata-identifier">
+               <tag name="CogAtlas">
+                  <tag name="#"/>
+               </tag>
+               <tag name="CogPo">
+                  <tag name="#"/>
+               </tag>
+               <tag name="DOI">
+                  <tag name="#"/>
+               </tag>
+               <tag name="OBO-identifier">
+                  <tag name="#"/>
+               </tag>
+               <tag name="Species-identifier">
+                  <tag name="#"/>
+               </tag>
+               <tag name="Subject-identifier">
+                  <tag name="#"/>
+               </tag>
+               <tag name="UUID">
+                  <tag name="#"/>
+               </tag>
+               <tag name="Version-identifier">
+                  <tag name="#"/>
+               </tag>
+            </tag>
+            <tag name="Modified-date">
+               <tag name="#"/>
+            </tag>
+            <tag name="Pathname">
+               <tag name="#"/>
+            </tag>
+            <tag name="URL">
+               <tag name="#"/>
+            </tag>
+         </tag>
+         <tag name="Parameter">
+            <tag name="Parameter-label">
+               <tag name="#"/>
+            </tag>
+            <tag name="Parameter-value">
+               <tag name="#"/>
+            </tag>
+         </tag>
+      </tag>
+      <tag name="Organizational-property">
+         <tag name="Collection">
+            <tag name="#"/>
+         </tag>
+         <tag name="Condition-variable">
+            <tag name="#"/>
+         </tag>
+         <tag name="Control-variable">
+            <tag name="#"/>
+         </tag>
+         <tag name="Def">
+            <tag name="#"/>
+         </tag>
+         <tag name="Def-expand">
+            <tag name="#"/>
+         </tag>
+         <tag name="Definition">
+            <tag name="#"/>
+         </tag>
+         <tag name="Event-context"/>
+         <tag name="Event-stream">
+            <tag name="#"/>
+         </tag>
+         <tag name="Experimental-intertrial">
+            <tag name="#"/>
+         </tag>
+         <tag name="Experimental-trial">
+            <tag name="#"/>
+         </tag>
+         <tag name="Indicator-variable">
+            <tag name="#"/>
+         </tag>
+         <tag name="Recording">
+            <tag name="#"/>
+         </tag>
+         <tag name="Task">
+            <tag name="#"/>
+         </tag>
+         <tag name="Time-block">
+            <tag name="#"/>
+         </tag>
+      </tag>
+      <tag name="Sensory-property">
+         <tag name="Sensory-attribute">
+            <tag name="Auditory-attribute">
+               <tag name="Loudness">
+                  <tag name="#"/>
+               </tag>
+               <tag name="Pitch">
+                  <tag name="#"/>
+               </tag>
+               <tag name="Sound-envelope">
+                  <tag name="Sound-envelope-attack">
+                     <tag name="#"/>
+                  </tag>
+                  <tag name="Sound-envelope-decay">
+                     <tag name="#"/>
+                  </tag>
+                  <tag name="Sound-envelope-release">
+                     <tag name="#"/>
+                  </tag>
+                  <tag name="Sound-envelope-sustain">
+                     <tag name="#"/>
+                  </tag>
+               </tag>
+               <tag name="Sound-volume">
+                  <tag name="#"/>
+               </tag>
+               <tag name="Timbre">
+                  <tag name="#"/>
+               </tag>
+            </tag>
+            <tag name="Gustatory-attribute">
+               <tag name="Bitter"/>
+               <tag name="Salty"/>
+               <tag name="Savory"/>
+               <tag name="Sour"/>
+               <tag name="Sweet"/>
+            </tag>
+            <tag name="Olfactory-attribute"/>
+            <tag name="Somatic-attribute">
+               <tag name="Pain"/>
+               <tag name="Stress"/>
+            </tag>
+            <tag name="Tactile-attribute">
+               <tag name="Tactile-pressure"/>
+               <tag name="Tactile-temperature"/>
+               <tag name="Tactile-texture"/>
+               <tag name="Tactile-vibration"/>
+            </tag>
+            <tag name="Vestibular-attribute"/>
+            <tag name="Visual-attribute">
+               <tag name="Color">
+                  <tag name="CSS-color">
+                     <tag name="Blue-color">
+                        <tag name="Blue"/>
+                        <tag name="CadetBlue"/>
+                        <tag name="CornflowerBlue"/>
+                        <tag name="DarkBlue"/>
+                        <tag name="DeepSkyBlue"/>
+                        <tag name="DodgerBlue"/>
+                        <tag name="LightBlue"/>
+                        <tag name="LightSkyBlue"/>
+                        <tag name="LightSteelBlue"/>
+                        <tag name="MediumBlue"/>
+                        <tag name="MidnightBlue"/>
+                        <tag name="Navy"/>
+                        <tag name="PowderBlue"/>
+                        <tag name="RoyalBlue"/>
+                        <tag name="SkyBlue"/>
+                        <tag name="SteelBlue"/>
+                     </tag>
+                     <tag name="Brown-color">
+                        <tag name="Bisque"/>
+                        <tag name="BlanchedAlmond"/>
+                        <tag name="Brown"/>
+                        <tag name="BurlyWood"/>
+                        <tag name="Chocolate"/>
+                        <tag name="Cornsilk"/>
+                        <tag name="DarkGoldenRod"/>
+                        <tag name="GoldenRod"/>
+                        <tag name="Maroon"/>
+                        <tag name="NavajoWhite"/>
+                        <tag name="Olive"/>
+                        <tag name="Peru"/>
+                        <tag name="RosyBrown"/>
+                        <tag name="SaddleBrown"/>
+                        <tag name="SandyBrown"/>
+                        <tag name="Sienna"/>
+                        <tag name="Tan"/>
+                        <tag name="Wheat"/>
+                     </tag>
+                     <tag name="Cyan-color">
+                        <tag name="Aqua"/>
+                        <tag name="Aquamarine"/>
+                        <tag name="Cyan"/>
+                        <tag name="DarkTurquoise"/>
+                        <tag name="LightCyan"/>
+                        <tag name="MediumTurquoise"/>
+                        <tag name="PaleTurquoise"/>
+                        <tag name="Turquoise"/>
+                     </tag>
+                     <tag name="Gray-color">
+                        <tag name="Black"/>
+                        <tag name="DarkGray"/>
+                        <tag name="DarkSlateGray"/>
+                        <tag name="DimGray"/>
+                        <tag name="Gainsboro"/>
+                        <tag name="Gray"/>
+                        <tag name="LightGray"/>
+                        <tag name="LightSlateGray"/>
+                        <tag name="Silver"/>
+                        <tag name="SlateGray"/>
+                     </tag>
+                     <tag name="Green-color">
+                        <tag name="Chartreuse"/>
+                        <tag name="DarkCyan"/>
+                        <tag name="DarkGreen"/>
+                        <tag name="DarkOliveGreen"/>
+                        <tag name="DarkSeaGreen"/>
+                        <tag name="ForestGreen"/>
+                        <tag name="Green"/>
+                        <tag name="GreenYellow"/>
+                        <tag name="LawnGreen"/>
+                        <tag name="LightGreen"/>
+                        <tag name="LightSeaGreen"/>
+                        <tag name="Lime"/>
+                        <tag name="LimeGreen"/>
+                        <tag name="MediumAquaMarine"/>
+                        <tag name="MediumSeaGreen"/>
+                        <tag name="MediumSpringGreen"/>
+                        <tag name="OliveDrab"/>
+                        <tag name="PaleGreen"/>
+                        <tag name="SeaGreen"/>
+                        <tag name="SpringGreen"/>
+                        <tag name="Teal"/>
+                        <tag name="YellowGreen"/>
+                     </tag>
+                     <tag name="Orange-color">
+                        <tag name="Coral"/>
+                        <tag name="DarkOrange"/>
+                        <tag name="Orange"/>
+                        <tag name="OrangeRed"/>
+                        <tag name="Tomato"/>
+                     </tag>
+                     <tag name="Pink-color">
+                        <tag name="DeepPink"/>
+                        <tag name="HotPink"/>
+                        <tag name="LightPink"/>
+                        <tag name="MediumVioletRed"/>
+                        <tag name="PaleVioletRed"/>
+                        <tag name="Pink"/>
+                     </tag>
+                     <tag name="Purple-color">
+                        <tag name="BlueViolet"/>
+                        <tag name="DarkMagenta"/>
+                        <tag name="DarkOrchid"/>
+                        <tag name="DarkSlateBlue"/>
+                        <tag name="DarkViolet"/>
+                        <tag name="Fuchsia"/>
+                        <tag name="Indigo"/>
+                        <tag name="Lavender"/>
+                        <tag name="Magenta"/>
+                        <tag name="MediumOrchid"/>
+                        <tag name="MediumPurple"/>
+                        <tag name="MediumSlateBlue"/>
+                        <tag name="Orchid"/>
+                        <tag name="Plum"/>
+                        <tag name="Purple"/>
+                        <tag name="RebeccaPurple"/>
+                        <tag name="SlateBlue"/>
+                        <tag name="Thistle"/>
+                        <tag name="Violet"/>
+                     </tag>
+                     <tag name="Red-color">
+                        <tag name="Crimson"/>
+                        <tag name="DarkRed"/>
+                        <tag name="DarkSalmon"/>
+                        <tag name="FireBrick"/>
+                        <tag name="IndianRed"/>
+                        <tag name="LightCoral"/>
+                        <tag name="LightSalmon"/>
+                        <tag name="Red"/>
+                        <tag name="Salmon"/>
+                     </tag>
+                     <tag name="White-color">
+                        <tag name="AliceBlue"/>
+                        <tag name="AntiqueWhite"/>
+                        <tag name="Azure"/>
+                        <tag name="Beige"/>
+                        <tag name="FloralWhite"/>
+                        <tag name="GhostWhite"/>
+                        <tag name="HoneyDew"/>
+                        <tag name="Ivory"/>
+                        <tag name="LavenderBlush"/>
+                        <tag name="Linen"/>
+                        <tag name="MintCream"/>
+                        <tag name="MistyRose"/>
+                        <tag name="OldLace"/>
+                        <tag name="SeaShell"/>
+                        <tag name="Snow"/>
+                        <tag name="White"/>
+                        <tag name="WhiteSmoke"/>
+                     </tag>
+                     <tag name="Yellow-color">
+                        <tag name="DarkKhaki"/>
+                        <tag name="Gold"/>
+                        <tag name="Khaki"/>
+                        <tag name="LemonChiffon"/>
+                        <tag name="LightGoldenRodYellow"/>
+                        <tag name="LightYellow"/>
+                        <tag name="Moccasin"/>
+                        <tag name="PaleGoldenRod"/>
+                        <tag name="PapayaWhip"/>
+                        <tag name="PeachPuff"/>
+                        <tag name="Yellow"/>
+                     </tag>
+                  </tag>
+                  <tag name="Color-shade">
+                     <tag name="Dark-shade"/>
+                     <tag name="Light-shade"/>
+                  </tag>
+                  <tag name="Grayscale">
+                     <tag name="#"/>
+                  </tag>
+                  <tag name="HSV-color">
+                     <tag name="HSV-value">
+                        <tag name="#"/>
+                     </tag>
+                     <tag name="Hue">
+                        <tag name="#"/>
+                     </tag>
+                     <tag name="Saturation">
+                        <tag name="#"/>
+                     </tag>
+                  </tag>
+                  <tag name="Luminance"/>
+                  <tag name="Luminance-contrast">
+                     <tag name="#"/>
+                  </tag>
+                  <tag name="Opacity"/>
+               </tag>
+            </tag>
+         </tag>
+         <tag name="Sensory-presentation">
+            <tag name="Auditory-presentation">
+               <tag name="Loudspeaker-separation"/>
+               <tag name="Monophonic"/>
+               <tag name="Silent"/>
+               <tag name="Stereophonic"/>
+            </tag>
+            <tag name="Gustatory-presentation"/>
+            <tag name="Olfactory-presentation"/>
+            <tag name="Somatic-presentation"/>
+            <tag name="Tactile-presentation"/>
+            <tag name="Vestibular-presentation"/>
+            <tag name="Visual-presentation">
+               <tag name="2D-view"/>
+               <tag name="3D-view"/>
+               <tag name="Background-view"/>
+               <tag name="Bistable-view"/>
+               <tag name="Foreground-view"/>
+               <tag name="Foveal-view"/>
+               <tag name="Map-view">
+                  <tag name="Aerial-view"/>
+                  <tag name="Satellite-view"/>
+                  <tag name="Street-view"/>
+               </tag>
+               <tag name="Peripheral-view"/>
+            </tag>
+         </tag>
+      </tag>
+      <tag name="Task-property">
+         <tag name="Task-action-type">
+            <tag name="Appropriate-action"/>
+            <tag name="Correct-action"/>
+            <tag name="Correction"/>
+            <tag name="Done-indication"/>
+            <tag name="Imagined-action"/>
+            <tag name="Inappropriate-action"/>
+            <tag name="Incorrect-action"/>
+            <tag name="Indeterminate-action"/>
+            <tag name="Miss"/>
+            <tag name="Near-miss"/>
+            <tag name="Omitted-action"/>
+            <tag name="Ready-indication"/>
+         </tag>
+         <tag name="Task-attentional-demand">
+            <tag name="Bottom-up-attention"/>
+            <tag name="Covert-attention"/>
+            <tag name="Divided-attention"/>
+            <tag name="Focused-attention"/>
+            <tag name="Orienting-attention"/>
+            <tag name="Overt-attention"/>
+            <tag name="Selective-attention"/>
+            <tag name="Sustained-attention"/>
+            <tag name="Switched-attention"/>
+            <tag name="Top-down-attention"/>
+         </tag>
+         <tag name="Task-effect-evidence">
+            <tag name="Behavioral-evidence"/>
+            <tag name="Computational-evidence"/>
+            <tag name="External-evidence"/>
+            <tag name="Intended-effect"/>
+         </tag>
+         <tag name="Task-event-role">
+            <tag name="Cue"/>
+            <tag name="Experimental-stimulus"/>
+            <tag name="Feedback"/>
+            <tag name="Incidental"/>
+            <tag name="Instructional"/>
+            <tag name="Mishap"/>
+            <tag name="Participant-response"/>
+            <tag name="Task-activity"/>
+            <tag name="Warning"/>
+         </tag>
+         <tag name="Task-relationship">
+            <tag name="Background-subtask"/>
+            <tag name="Primary-subtask"/>
+         </tag>
+         <tag name="Task-stimulus-role">
+            <tag name="Distractor"/>
+            <tag name="Expected"/>
+            <tag name="Extraneous"/>
+            <tag name="Go-signal"/>
+            <tag name="Meaningful"/>
+            <tag name="Newly-learned"/>
+            <tag name="Non-informative"/>
+            <tag name="Non-target"/>
+            <tag name="Not-meaningful"/>
+            <tag name="Novel"/>
+            <tag name="Oddball"/>
+            <tag name="Penalty"/>
+            <tag name="Planned"/>
+            <tag name="Priming"/>
+            <tag name="Query"/>
+            <tag name="Reward"/>
+            <tag name="Stop-signal"/>
+            <tag name="Target"/>
+            <tag name="Threat"/>
+            <tag name="Timed"/>
+            <tag name="Unexpected"/>
+            <tag name="Unplanned"/>
+         </tag>
+      </tag>
+   </tag>
+   <tag name="Relation">
+      <tag name="Comparative-relation">
+         <tag name="Approximately-equal-to"/>
+         <tag name="Equal-to"/>
+         <tag name="Greater-than"/>
+         <tag name="Greater-than-or-equal-to"/>
+         <tag name="Less-than"/>
+         <tag name="Less-than-or-equal-to"/>
+         <tag name="Not-equal-to"/>
+      </tag>
+      <tag name="Connective-relation">
+         <tag name="Belongs-to"/>
+         <tag name="Connected-to"/>
+         <tag name="Contained-in"/>
+         <tag name="Described-by"/>
+         <tag name="From-to"/>
+         <tag name="Group-of"/>
+         <tag name="Implied-by"/>
+         <tag name="Includes"/>
+         <tag name="Interacts-with"/>
+         <tag name="Member-of"/>
+         <tag name="Part-of"/>
+         <tag name="Performed-by"/>
+         <tag name="Performed-using"/>
+         <tag name="Related-to"/>
+         <tag name="Unrelated-to"/>
+      </tag>
+      <tag name="Directional-relation">
+         <tag name="Away-from"/>
+         <tag name="Towards"/>
+      </tag>
+      <tag name="Logical-relation">
+         <tag name="And"/>
+         <tag name="Or"/>
+      </tag>
+      <tag name="Spatial-relation">
+         <tag name="Above"/>
+         <tag name="Across-from"/>
+         <tag name="Adjacent-to"/>
+         <tag name="Ahead-of"/>
+         <tag name="Around"/>
+         <tag name="Behind"/>
+         <tag name="Below"/>
+         <tag name="Between"/>
+         <tag name="Bilateral-to"/>
+         <tag name="Bottom-edge-of"/>
+         <tag name="Boundary-of"/>
+         <tag name="Center-of"/>
+         <tag name="Close-to"/>
+         <tag name="Far-from"/>
+         <tag name="In-front-of"/>
+         <tag name="Left-edge-of"/>
+         <tag name="Left-side-of"/>
+         <tag name="Lower-center-of"/>
+         <tag name="Lower-left-of"/>
+         <tag name="Lower-right-of"/>
+         <tag name="Outside-of"/>
+         <tag name="Over"/>
+         <tag name="Right-edge-of"/>
+         <tag name="Right-side-of"/>
+         <tag name="To-left-of"/>
+         <tag name="To-right-of"/>
+         <tag name="Top-edge-of"/>
+         <tag name="Top-of"/>
+         <tag name="Underneath"/>
+         <tag name="Upper-center-of"/>
+         <tag name="Upper-left-of"/>
+         <tag name="Upper-right-of"/>
+         <tag name="Within"/>
+      </tag>
+      <tag name="Temporal-relation">
+         <tag name="After"/>
+         <tag name="Asynchronous-with"/>
+         <tag name="Before"/>
+         <tag name="During"/>
+         <tag name="Synchronous-with"/>
+         <tag name="Waiting-for"/>
+      </tag>
+   </tag>
+</hed_tags>
