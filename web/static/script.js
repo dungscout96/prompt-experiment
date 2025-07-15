@@ -618,6 +618,25 @@ function showExperiments() {
     loadExperiments();
 }
 
+// Toggle Recent Experiments panel visibility
+function toggleRecentExperiments() {
+    const recentCol = document.getElementById('recentExperimentsCol');
+    const formCol = document.getElementById('experimentFormCol');
+    const toggleBtn = document.getElementById('toggleRecentBtn');
+    
+    if (recentCol.style.display === 'none') {
+        // Show Recent Experiments
+        recentCol.style.display = 'block';
+        formCol.className = 'col-lg-8';
+        toggleBtn.innerHTML = '<i class="fas fa-eye-slash"></i> Hide';
+    } else {
+        // Hide Recent Experiments
+        recentCol.style.display = 'none';
+        formCol.className = 'col-lg-12';
+        toggleBtn.innerHTML = '<i class="fas fa-eye"></i> Show';
+    }
+}
+
 // Utility functions
 function formatTimestamp(timestamp) {
     if (!timestamp || timestamp === 'Unknown') return 'Unknown';

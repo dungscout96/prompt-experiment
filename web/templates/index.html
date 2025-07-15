@@ -19,6 +19,11 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="toggleRecentExperiments()">
+                            <i class="fas fa-history"></i> Toggle Recent
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="#experiments" onclick="showExperiments()">
                             <i class="fas fa-history"></i> Experiments
                         </a>
@@ -36,7 +41,21 @@
     <div class="container mt-4">
         <!-- Main Experiment Interface -->
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-4" id="recentExperimentsCol">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5><i class="fas fa-history"></i> Recent Experiments</h5>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="toggleRecentExperiments()" id="toggleRecentBtn">
+                            <i class="fas fa-eye-slash"></i> Hide
+                        </button>
+                    </div>
+                    <div class="card-body" id="recentExperiments">
+                        <p class="text-muted">Loading experiments...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-8" id="experimentFormCol">
             <div class="card">
                 <div class="card-header">
                 <h5><i class="fas fa-flask"></i> New Experiment</h5>
@@ -97,17 +116,6 @@
                 </form>
                 </div>
             </div>
-            </div>
-            
-            <div class="col-lg-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h5><i class="fas fa-history"></i> Recent Experiments</h5>
-                    </div>
-                    <div class="card-body" id="recentExperiments">
-                        <p class="text-muted">Loading experiments...</p>
-                    </div>
-                </div>
             </div>
         </div>
 
