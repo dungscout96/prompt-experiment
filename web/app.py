@@ -116,7 +116,7 @@ def get_models():
     """Get available models"""
     # For now, return common models. In a real app, you might query Ollama for available models
     ollama_models = ['qwen3:8b', 'llama3:8b', 'mistral:7b', 'codellama:7b', 'gemma:7b']
-    gemini_models = ['gemini-1.5-flash', 'gemini-1.5-pro']
+    gemini_models = ['gemini-2.5-flash']
     
     return jsonify({
         'ollama': ollama_models,
