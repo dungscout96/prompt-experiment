@@ -26,6 +26,29 @@ def save_hed_vocab(vocab_content):
     with open(vocab_path, 'w') as file:
         file.write(vocab_content)
 
+# Auto-save experiment to filesystem
+def auto_save_experiment(experiment_data):
+    try:
+        # Create experiments directory if it doesn't exist
+        experiments_dir = Path(__file__).parent.parent / 'prompt_experiments'
+        experiments_dir.mkdir(exist_ok=True)
+        
+        # Find next available filename
+        i = 0
+        while (experiments_dir / f'experiment_{i}.json').exists():
+            i += 1
+        
+        filename = f'experiment_{i}.json'
+        
+        # Save experiment
+        with open(experiments_dir / filename, 'w') as f:
+            json.dump(experiment_data, f, indent=2)
+        
+        return filename
+    except Exception as e:
+        print(f"Error auto-saving experiment: {e}")
+        return None
+
 # Default prompt template
 DEFAULT_PROMPT_TEMPLATE = '''
 You are an expert in converting natural language descriptions of events into structured annotations using a predefined Hierarchical Event Descriptor (HED) vocabulary. Your task is to extract relevant concepts from the input description and represent them as a comma-separated list of HED tags, strictly adhering to the provided vocabulary.
@@ -181,11 +204,27 @@ def run_experiment():
         # Calculate inference time
         inference_time = time.time() - start_time
         
+        # Automatically save experiment to filesystem
+        experiment_data = {
+            'model': model,
+            'prompt_template': prompt_template,
+            'description': description,
+            'model_response': model_response,
+            'inference_time': inference_time,
+            'timestamp': datetime.datetime.now().isoformat(),
+            'prompt': prompt
+        }
+        
+        # Save to filesystem automatically
+        saved_filename = auto_save_experiment(experiment_data)
+        
         return jsonify({
             'success': True,
             'response': model_response,
             'prompt': prompt,
-            'inference_time': inference_time
+            'inference_time': inference_time,
+            'auto_saved': True,
+            'filename': saved_filename
         })
         
     except Exception as e:
@@ -193,7 +232,7 @@ def run_experiment():
 
 @app.route('/api/save_experiment', methods=['POST'])
 def save_experiment():
-    """Save an experiment to a file"""
+    """Save an experiment to a file (legacy endpoint - now mainly for manual saves)"""
     data = request.json
     
     model = data.get('model')
@@ -206,18 +245,6 @@ def save_experiment():
         return jsonify({'error': 'All fields are required'}), 400
     
     try:
-        # Create experiments directory if it doesn't exist
-        experiments_dir = Path(__file__).parent.parent / 'prompt_experiments'
-        experiments_dir.mkdir(exist_ok=True)
-        
-        # Find next available filename
-        i = 0
-        while (experiments_dir / f'experiment_{i}.json').exists():
-            i += 1
-        
-        filename = f'experiment_{i}.json'
-        
-        # Save experiment
         experiment_data = {
             'model': model,
             'prompt_template': prompt_template,
@@ -227,13 +254,15 @@ def save_experiment():
             'timestamp': datetime.datetime.now().isoformat()
         }
         
-        with open(experiments_dir / filename, 'w') as f:
-            json.dump(experiment_data, f, indent=2)
+        filename = auto_save_experiment(experiment_data)
         
-        return jsonify({
-            'success': True,
-            'filename': filename
-        })
+        if filename:
+            return jsonify({
+                'success': True,
+                'filename': filename
+            })
+        else:
+            return jsonify({'error': 'Failed to save experiment'}), 500
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500

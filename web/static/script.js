@@ -306,7 +306,7 @@ async function runExperiment() {
         // Display results
         displayResults(result);
         
-        // Store current experiment data for saving
+        // Store current experiment data for potential manual operations
         currentExperimentData = {
             model: model,
             description: description,
@@ -316,7 +316,16 @@ async function runExperiment() {
             full_prompt: result.prompt
         };
         
-        showAlert('Experiment completed successfully!', 'success');
+        // Show success message with auto-save info
+        if (result.auto_saved && result.filename) {
+            showAlert(`Experiment completed and automatically saved as ${result.filename}!`, 'success');
+            
+            // Reload experiments list and descriptions to show the new experiment
+            loadExperiments();
+            loadDescriptions();
+        } else {
+            showAlert('Experiment completed successfully!', 'success');
+        }
         
     } catch (error) {
         console.error('Error running experiment:', error);
@@ -335,6 +344,13 @@ function displayResults(result) {
     document.getElementById('inferenceTime').textContent = formatInferenceTime(result.inference_time);
     document.getElementById('resultModel').textContent = document.getElementById('modelSelect').value;
     
+    // Display saved filename if auto-saved
+    if (result.auto_saved && result.filename) {
+        document.getElementById('savedFilename').textContent = result.filename;
+    } else {
+        document.getElementById('savedFilename').textContent = 'Not saved';
+    }
+    
     // Show results section
     const resultsSection = document.getElementById('resultsSection');
     resultsSection.style.display = 'block';
@@ -348,7 +364,7 @@ function hideResults() {
     document.getElementById('resultsSection').style.display = 'none';
 }
 
-// Save experiment
+// Legacy save experiment function (kept for compatibility but not used in UI)
 async function saveExperiment() {
     if (!currentExperimentData) {
         showAlert('No experiment data to save.', 'warning');
@@ -371,7 +387,7 @@ async function saveExperiment() {
             return;
         }
         
-        showAlert(`Experiment saved as ${result.filename}`, 'success');
+        showAlert(`Experiment manually saved as ${result.filename}`, 'success');
         
         // Reload experiments list and descriptions
         loadExperiments();

@@ -202,6 +202,10 @@ pre {
     background-color: #0d6efd !important;
 }
 
+.badge.bg-success {
+    background-color: #198754 !important;
+}
+
 .icon-text {
     display: inline-flex;
     align-items: center;
@@ -302,4 +306,19 @@ pre {
     color: #fff !important;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 4px;
+}
+
+.auto-save-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.auto-save-info i {
+    color: #198754;
+}
+
+.card-header .badge {
+    font-size: 0.75rem;
+    vertical-align: middle;
 }

@@ -111,11 +111,8 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5><i class="fas fa-chart-line"></i> Results</h5>
+                        <h5><i class="fas fa-chart-line"></i> Results <span class="badge bg-success ms-2">Auto-saved</span></h5>
                         <div>
-                            <button class="btn btn-success btn-sm" onclick="saveExperiment()">
-                                <i class="fas fa-save"></i> Save
-                            </button>
                             <button class="btn btn-outline-secondary btn-sm" onclick="hideResults()">
                                 <i class="fas fa-times"></i> Close
                             </button>
@@ -134,14 +131,18 @@
                         </div>
                         <div class="row mt-3">
                             <div class="col-12">
-                                <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded">
-                                    <div>
+                                <div class="d-flex flex-wrap justify-content-between align-items-center bg-light p-3 rounded gap-2">
+                                    <div class="d-flex align-items-center">
                                         <strong>Inference Time:</strong>
                                         <span id="inferenceTime" class="badge bg-info ms-2">-</span>
                                     </div>
-                                    <div>
+                                    <div class="d-flex align-items-center">
                                         <strong>Model:</strong>
                                         <span id="resultModel" class="badge bg-primary ms-2">-</span>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <strong>Saved as:</strong>
+                                        <span id="savedFilename" class="badge bg-success ms-2">-</span>
                                     </div>
                                 </div>
                             </div>
