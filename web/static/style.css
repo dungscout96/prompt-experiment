@@ -390,3 +390,47 @@ pre {
 #apiKeyModal .alert-danger {
     border-left: 4px solid #dc3545;
 }
+
+/* Environment Configuration Modal styling */
+#envConfigModal .modal-dialog {
+    max-width: 500px;
+}
+
+#envConfigModal .form-control {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+#envConfigModal .alert {
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+#envConfigModal .alert-info {
+    border-left: 4px solid #0dcaf0;
+}
+
+#envConfigModal .alert-success {
+    border-left: 4px solid #198754;
+}
+
+#envConfigModal .alert-warning {
+    border-left: 4px solid #ffc107;
+}
+
+#envConfigModal .alert-danger {
+    border-left: 4px solid #dc3545;
+}
+
+#envConfigModal .input-group .btn {
+    border-radius: 0 8px 8px 0;
+}
+
+#envConfigModal .form-text {
+    font-size: 0.8em;
+}
+
+#envConfigModal h6 {
+    font-weight: 600;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 0.5rem;
+}

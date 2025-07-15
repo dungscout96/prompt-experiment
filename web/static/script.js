@@ -312,7 +312,7 @@ async function runExperiment() {
             
             if (!keyResult.has_api_key) {
                 showAlert('Gemini API key is required for this model. Please configure it first.', 'warning');
-                showApiKeyModal();
+                showEnvConfigModal();
                 return;
             }
         } catch (error) {
@@ -701,63 +701,175 @@ function toggleRecentExperiments() {
     }
 }
 
-// API Key Management Functions
-async function showApiKeyModal() {
-    const modal = new bootstrap.Modal(document.getElementById('apiKeyModal'));
+// Environment Configuration Functions
+async function showEnvConfigModal() {
+    const modal = new bootstrap.Modal(document.getElementById('envConfigModal'));
     
-    // Check current API key status
-    await checkApiKeyStatus();
+    // Load current environment variables
+    await loadEnvConfig();
     
     modal.show();
 }
 
-async function checkApiKeyStatus() {
+async function loadEnvConfig() {
     try {
-        const response = await fetch('/api/check_api_key');
+        const response = await fetch('/api/get_env_vars');
         const result = await response.json();
         
-        const statusDiv = document.getElementById('apiKeyStatus');
-        const apiKeyInput = document.getElementById('apiKeyInput');
+        const statusDiv = document.getElementById('envConfigStatus');
         
-        // Only update UI if the modal elements exist (i.e., modal is being shown)
-        if (statusDiv && apiKeyInput) {
-            if (result.has_api_key) {
+        if (result.env_vars) {
+            // Update form fields with current values
+            const envVars = result.env_vars;
+            
+            // Map environment variables to form fields
+            const fieldMap = {
+                'GEMINI_API_KEY': 'geminiApiKey',
+                'OPENAI_API_KEY': 'openaiApiKey', 
+                'ANTHROPIC_API_KEY': 'anthropicApiKey'
+            };
+            
+            let configuredCount = 0;
+            let totalCount = 0;
+            
+            for (const [envVar, fieldId] of Object.entries(fieldMap)) {
+                const field = document.getElementById(fieldId);
+                if (field && envVars[envVar]) {
+                    totalCount++;
+                    if (envVars[envVar].configured) {
+                        configuredCount++;
+                        if (envVars[envVar].masked) {
+                            field.placeholder = `Current: ${envVars[envVar].value}`;
+                        } else {
+                            field.value = envVars[envVar].value;
+                        }
+                    }
+                }
+            }
+            
+            // Show status
+            if (configuredCount > 0) {
                 statusDiv.innerHTML = `
                     <div class="alert alert-success">
                         <i class="fas fa-check-circle"></i>
-                        <strong>API Key Configured:</strong> ${result.key_preview}
+                        <strong>Configuration Status:</strong> ${configuredCount} of ${totalCount} variables configured
                     </div>
                 `;
-                apiKeyInput.placeholder = 'Enter new API key to replace existing one...';
             } else {
                 statusDiv.innerHTML = `
                     <div class="alert alert-warning">
                         <i class="fas fa-exclamation-triangle"></i>
-                        <strong>No API Key Found:</strong> Please enter your Gemini API key below.
+                        <strong>No Configuration Found:</strong> Please configure your environment variables below.
                     </div>
                 `;
-                apiKeyInput.placeholder = 'Enter your Gemini API key here...';
             }
         }
+    } catch (error) {
+        console.error('Error loading environment config:', error);
+        const statusDiv = document.getElementById('envConfigStatus');
+        statusDiv.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="fas fa-times-circle"></i>
+                <strong>Error:</strong> Unable to load environment configuration.
+            </div>
+        `;
+    }
+}
+
+async function saveEnvConfig() {
+    // Collect all form values
+    const envVars = {};
+    const fieldMap = {
+        'geminiApiKey': 'GEMINI_API_KEY',
+        'openaiApiKey': 'OPENAI_API_KEY',
+        'anthropicApiKey': 'ANTHROPIC_API_KEY'
+    };
+    
+    let hasValues = false;
+    
+    for (const [fieldId, envVar] of Object.entries(fieldMap)) {
+        const field = document.getElementById(fieldId);
+        if (field && field.value.trim()) {
+            envVars[envVar] = field.value.trim();
+            hasValues = true;
+        }
+    }
+    
+    if (!hasValues) {
+        showAlert('Please enter at least one configuration value.', 'warning');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/save_env_var', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                env_vars: envVars
+            })
+        });
         
+        const result = await response.json();
+        
+        if (result.error) {
+            showAlert(result.error, 'danger');
+            return;
+        }
+        
+        showAlert(`${result.message} (Updated: ${result.updated_vars.join(', ')})`, 'success');
+        
+        // Close modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('envConfigModal'));
+        modal.hide();
+        
+        // Clear the form
+        document.getElementById('envConfigForm').reset();
+        
+        // Refresh models list in case new APIs are now available
+        loadModels();
+        
+    } catch (error) {
+        console.error('Error saving environment config:', error);
+        showAlert('Error saving environment configuration. Please try again.', 'danger');
+    }
+}
+
+function togglePasswordVisibility(fieldId) {
+    const field = document.getElementById(fieldId);
+    const button = field.nextElementSibling;
+    const icon = button.querySelector('i');
+    
+    if (field.type === 'password') {
+        field.type = 'text';
+        icon.className = 'fas fa-eye-slash';
+    } else {
+        field.type = 'password';
+        icon.className = 'fas fa-eye';
+    }
+}
+
+// Legacy function for backward compatibility
+async function showApiKeyModal() {
+    showEnvConfigModal();
+}
+
+// Legacy function for backward compatibility  
+async function checkApiKeyStatus() {
+    try {
+        const response = await fetch('/api/check_api_key');
+        const result = await response.json();
         return result;
     } catch (error) {
         console.error('Error checking API key status:', error);
-        const statusDiv = document.getElementById('apiKeyStatus');
-        if (statusDiv) {
-            statusDiv.innerHTML = `
-                <div class="alert alert-danger">
-                    <i class="fas fa-times-circle"></i>
-                    <strong>Error:</strong> Unable to check API key status.
-                </div>
-            `;
-        }
         return { has_api_key: false };
     }
 }
 
+// Legacy function for backward compatibility
 async function saveApiKey() {
-    const apiKey = document.getElementById('apiKeyInput').value.trim();
+    const apiKey = document.getElementById('apiKeyInput')?.value?.trim();
     
     if (!apiKey) {
         showAlert('Please enter an API key.', 'warning');
@@ -765,13 +877,15 @@ async function saveApiKey() {
     }
     
     try {
-        const response = await fetch('/api/save_api_key', {
+        const response = await fetch('/api/save_env_var', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                api_key: apiKey
+                env_vars: {
+                    'GEMINI_API_KEY': apiKey
+                }
             })
         });
         
@@ -786,12 +900,14 @@ async function saveApiKey() {
         
         // Close modal
         const modal = bootstrap.Modal.getInstance(document.getElementById('apiKeyModal'));
-        modal.hide();
+        if (modal) modal.hide();
         
         // Clear the input
-        document.getElementById('apiKeyInput').value = '';
+        if (document.getElementById('apiKeyInput')) {
+            document.getElementById('apiKeyInput').value = '';
+        }
         
-        // Refresh models list to include Gemini if it wasn't available before
+        // Refresh models list
         loadModels();
         
     } catch (error) {
@@ -800,17 +916,7 @@ async function saveApiKey() {
     }
 }
 
-// Toggle API key visibility
-document.addEventListener('DOMContentLoaded', function() {
-    const showApiKeyCheckbox = document.getElementById('showApiKey');
-    const apiKeyInput = document.getElementById('apiKeyInput');
-    
-    if (showApiKeyCheckbox && apiKeyInput) {
-        showApiKeyCheckbox.addEventListener('change', function() {
-            apiKeyInput.type = this.checked ? 'text' : 'password';
-        });
-    }
-});
+// ...existing code...
 
 // Utility functions
 function formatTimestamp(timestamp) {

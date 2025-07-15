@@ -34,8 +34,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="showApiKeyModal()">
-                            <i class="fas fa-key"></i> API Key
+                        <a class="nav-link" href="#" onclick="showEnvConfigModal()">
+                            <i class="fas fa-cogs"></i> Environment
                         </a>
                     </li>
                 </ul>
@@ -307,49 +307,104 @@
         </div>
     </div>
 
-    <!-- API Key Configuration Modal -->
-    <div class="modal fade" id="apiKeyModal" tabindex="-1">
+    <!-- Environment Configuration Modal -->
+    <div class="modal fade" id="envConfigModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">
-                        <i class="fas fa-key"></i> Configure Gemini API Key
+                        <i class="fas fa-cogs"></i> Environment Configuration
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-info">
                         <i class="fas fa-info-circle"></i>
-                        <strong>Note:</strong> Your API key will be saved to a .env file in the project directory and is required to use Gemini models.
+                        <strong>Note:</strong> Environment variables are saved to a .env file in the project directory. 
+                        API keys are required for their respective AI models.
                     </div>
                     
-                    <div id="apiKeyStatus" class="mb-3"></div>
+                    <div id="envConfigStatus" class="mb-3"></div>
                     
-                    <form id="apiKeyForm">
-                        <div class="mb-3">
-                            <label for="apiKeyInput" class="form-label">
-                                <i class="fas fa-key"></i> Gemini API Key
-                            </label>
-                            <input type="password" class="form-control" id="apiKeyInput" 
-                                   placeholder="Enter your Gemini API key here..." required>
-                            <div class="form-text">
-                                You can get your API key from 
-                                <a href="https://makersuite.google.com/app/apikey" target="_blank">Google AI Studio</a>
+                    <form id="envConfigForm">
+                        <div class="row">
+                            <div class="col-12">
+                                <h6 class="text-muted mb-3">
+                                    <i class="fas fa-brain"></i> AI Model API Keys
+                                </h6>
+                                
+                                <div class="mb-3">
+                                    <label for="geminiApiKey" class="form-label">
+                                        <i class="fas fa-key"></i> Gemini API Key
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="geminiApiKey" 
+                                               placeholder="Enter Gemini API key...">
+                                        <button class="btn btn-outline-secondary" type="button" 
+                                                onclick="togglePasswordVisibility('geminiApiKey')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div class="form-text">
+                                        Get your API key from 
+                                        <a href="https://makersuite.google.com/app/apikey" target="_blank">Google AI Studio</a>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="openaiApiKey" class="form-label">
+                                        <i class="fas fa-key"></i> OpenAI API Key
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="openaiApiKey" 
+                                               placeholder="Enter OpenAI API key...">
+                                        <button class="btn btn-outline-secondary" type="button" 
+                                                onclick="togglePasswordVisibility('openaiApiKey')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div class="form-text">
+                                        Get your API key from 
+                                        <a href="https://platform.openai.com/api-keys" target="_blank">OpenAI Platform</a>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="anthropicApiKey" class="form-label">
+                                        <i class="fas fa-key"></i> Anthropic API Key
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="anthropicApiKey" 
+                                               placeholder="Enter Anthropic API key...">
+                                        <button class="btn btn-outline-secondary" type="button" 
+                                                onclick="togglePasswordVisibility('anthropicApiKey')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div class="form-text">
+                                        Get your API key from 
+                                        <a href="https://console.anthropic.com/" target="_blank">Anthropic Console</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" id="showApiKey">
-                            <label class="form-check-label" for="showApiKey">
-                                Show API key
-                            </label>
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="clearEmptyVars">
+                                    <label class="form-check-label" for="clearEmptyVars">
+                                        Clear empty variables from .env file
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" onclick="saveApiKey()">
-                        <i class="fas fa-save"></i> Save API Key
+                    <button type="button" class="btn btn-primary" onclick="saveEnvConfig()">
+                        <i class="fas fa-save"></i> Save Configuration
                     </button>
                 </div>
             </div>
