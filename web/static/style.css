@@ -393,7 +393,7 @@ pre {
 
 /* Environment Configuration Modal styling */
 #envConfigModal .modal-dialog {
-    max-width: 500px;
+    max-width: 700px;
 }
 
 #envConfigModal .form-control {

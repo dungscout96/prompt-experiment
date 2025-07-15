@@ -717,52 +717,106 @@ async function loadEnvConfig() {
         const result = await response.json();
         
         const statusDiv = document.getElementById('envConfigStatus');
+        const configuredApiKeysDiv = document.getElementById('configuredApiKeys');
+        const newApiKeyTypeSelect = document.getElementById('newApiKeyType');
         
-        if (result.env_vars) {
-            // Update form fields with current values
-            const envVars = result.env_vars;
+        if (result.env_vars && result.available_vars !== undefined) {
+            // Clear existing content
+            configuredApiKeysDiv.innerHTML = '';
+            newApiKeyTypeSelect.innerHTML = '<option value="">Select API Provider...</option>';
             
-            // Map environment variables to form fields
-            const fieldMap = {
-                'GEMINI_API_KEY': 'geminiApiKey',
-                'OPENAI_API_KEY': 'openaiApiKey', 
-                'ANTHROPIC_API_KEY': 'anthropicApiKey'
+            // API key information
+            const apiKeyInfo = {
+                'GEMINI_API_KEY': {
+                    name: 'Gemini API Key',
+                    icon: 'fas fa-key',
+                    url: 'https://makersuite.google.com/app/apikey',
+                    provider: 'Google AI Studio'
+                },
+                'OPENAI_API_KEY': {
+                    name: 'OpenAI API Key',
+                    icon: 'fas fa-key',
+                    url: 'https://platform.openai.com/api-keys',
+                    provider: 'OpenAI Platform'
+                },
+                'ANTHROPIC_API_KEY': {
+                    name: 'Anthropic API Key',
+                    icon: 'fas fa-key',
+                    url: 'https://console.anthropic.com/',
+                    provider: 'Anthropic Console'
+                }
             };
             
+            // Show configured API keys
             let configuredCount = 0;
-            let totalCount = 0;
-            
-            for (const [envVar, fieldId] of Object.entries(fieldMap)) {
-                const field = document.getElementById(fieldId);
-                if (field && envVars[envVar]) {
-                    totalCount++;
-                    if (envVars[envVar].configured) {
-                        configuredCount++;
-                        if (envVars[envVar].masked) {
-                            field.placeholder = `Current: ${envVars[envVar].value}`;
-                        } else {
-                            field.value = envVars[envVar].value;
-                        }
-                    }
+            for (const [envVar, config] of Object.entries(result.env_vars)) {
+                if (config.configured && apiKeyInfo[envVar]) {
+                    configuredCount++;
+                    const info = apiKeyInfo[envVar];
+                    const fieldId = envVar.toLowerCase().replace('_', '');
+                    
+                    const fieldHtml = `
+                        <div class="mb-3">
+                            <label for="${fieldId}" class="form-label">
+                                <i class="${info.icon}"></i> ${info.name}
+                                <button type="button" class="btn btn-outline-danger btn-sm ms-2" 
+                                        onclick="removeApiKey('${envVar}')" title="Remove this API key">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="${fieldId}" 
+                                       placeholder="Current: ${config.value}" data-env-var="${envVar}">
+                                <button class="btn btn-outline-secondary" type="button" 
+                                        onclick="togglePasswordVisibility('${fieldId}')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="form-text">
+                                Get your API key from 
+                                <a href="${info.url}" target="_blank">${info.provider}</a>
+                            </div>
+                        </div>
+                    `;
+                    configuredApiKeysDiv.innerHTML += fieldHtml;
                 }
             }
             
+            // Populate dropdown with available (not configured) API keys
+            result.available_vars.forEach(envVar => {
+                if (apiKeyInfo[envVar]) {
+                    const option = document.createElement('option');
+                    option.value = envVar;
+                    option.textContent = apiKeyInfo[envVar].name;
+                    newApiKeyTypeSelect.appendChild(option);
+                }
+            });
+            
             // Show status
+            const totalPossible = Object.keys(apiKeyInfo).length;
             if (configuredCount > 0) {
                 statusDiv.innerHTML = `
                     <div class="alert alert-success">
                         <i class="fas fa-check-circle"></i>
-                        <strong>Configuration Status:</strong> ${configuredCount} of ${totalCount} variables configured
+                        <strong>Configuration Status:</strong> ${configuredCount} of ${totalPossible} API keys configured
                     </div>
                 `;
             } else {
                 statusDiv.innerHTML = `
                     <div class="alert alert-warning">
                         <i class="fas fa-exclamation-triangle"></i>
-                        <strong>No Configuration Found:</strong> Please configure your environment variables below.
+                        <strong>No API Keys Found:</strong> Please add your API keys below.
                     </div>
                 `;
             }
+            
+            // Enable/disable add new API key controls
+            const hasAvailable = result.available_vars.length > 0;
+            document.getElementById('newApiKeyValue').disabled = !hasAvailable;
+            document.getElementById('addApiKeyBtn').disabled = !hasAvailable;
+            const toggleBtn = document.getElementById('newApiKeyValue').nextElementSibling;
+            if (toggleBtn) toggleBtn.disabled = !hasAvailable;
+            
         }
     } catch (error) {
         console.error('Error loading environment config:', error);
@@ -777,26 +831,26 @@ async function loadEnvConfig() {
 }
 
 async function saveEnvConfig() {
-    // Collect all form values
+    // Collect all form values from dynamically generated fields
     const envVars = {};
-    const fieldMap = {
-        'geminiApiKey': 'GEMINI_API_KEY',
-        'openaiApiKey': 'OPENAI_API_KEY',
-        'anthropicApiKey': 'ANTHROPIC_API_KEY'
-    };
+    
+    // Get all API key input fields
+    const apiKeyFields = document.querySelectorAll('#configuredApiKeys input[data-env-var]');
     
     let hasValues = false;
     
-    for (const [fieldId, envVar] of Object.entries(fieldMap)) {
-        const field = document.getElementById(fieldId);
-        if (field && field.value.trim()) {
-            envVars[envVar] = field.value.trim();
+    apiKeyFields.forEach(field => {
+        const envVar = field.getAttribute('data-env-var');
+        const value = field.value.trim();
+        
+        if (value) {
+            envVars[envVar] = value;
             hasValues = true;
         }
-    }
+    });
     
     if (!hasValues) {
-        showAlert('Please enter at least one configuration value.', 'warning');
+        showAlert('Please enter at least one API key value.', 'warning');
         return;
     }
     
@@ -824,8 +878,8 @@ async function saveEnvConfig() {
         const modal = bootstrap.Modal.getInstance(document.getElementById('envConfigModal'));
         modal.hide();
         
-        // Clear the form
-        document.getElementById('envConfigForm').reset();
+        // Clear the form inputs
+        apiKeyFields.forEach(field => field.value = '');
         
         // Refresh models list in case new APIs are now available
         loadModels();
@@ -916,7 +970,127 @@ async function saveApiKey() {
     }
 }
 
-// ...existing code...
+async function addNewApiKey() {
+    const typeSelect = document.getElementById('newApiKeyType');
+    const valueInput = document.getElementById('newApiKeyValue');
+    
+    const apiKeyType = typeSelect.value;
+    const apiKeyValue = valueInput.value.trim();
+    
+    if (!apiKeyType || !apiKeyValue) {
+        showAlert('Please select an API provider and enter a key.', 'warning');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/save_env_var', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                env_vars: {
+                    [apiKeyType]: apiKeyValue
+                }
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.error) {
+            showAlert(result.error, 'danger');
+            return;
+        }
+        
+        showAlert(`${result.message}`, 'success');
+        
+        // Clear the add form
+        typeSelect.value = '';
+        valueInput.value = '';
+        
+        // Reload the configuration to show the new key
+        await loadEnvConfig();
+        
+        // Refresh models list
+        loadModels();
+        
+    } catch (error) {
+        console.error('Error adding API key:', error);
+        showAlert('Error adding API key. Please try again.', 'danger');
+    }
+}
+
+async function removeApiKey(envVar) {
+    if (!confirm(`Are you sure you want to remove ${envVar}?`)) {
+        return;
+    }
+    
+    try {
+        // Read current .env file and remove the specified variable
+        const response = await fetch('/api/get_env_vars');
+        const result = await response.json();
+        
+        if (result.error) {
+            showAlert('Error reading current configuration.', 'danger');
+            return;
+        }
+        
+        // Remove the variable by setting it to empty (the backend will handle removal)
+        const saveResponse = await fetch('/api/save_env_var', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                env_vars: {
+                    [envVar]: '' // Empty value will remove it
+                }
+            })
+        });
+        
+        const saveResult = await saveResponse.json();
+        
+        if (saveResult.error) {
+            showAlert(saveResult.error, 'danger');
+            return;
+        }
+        
+        showAlert(`${envVar} removed successfully.`, 'success');
+        
+        // Reload the configuration
+        await loadEnvConfig();
+        
+        // Refresh models list
+        loadModels();
+        
+    } catch (error) {
+        console.error('Error removing API key:', error);
+        showAlert('Error removing API key. Please try again.', 'danger');
+    }
+}
+
+// Enable/disable add new API key controls when selection changes
+document.addEventListener('DOMContentLoaded', function() {
+    const typeSelect = document.getElementById('newApiKeyType');
+    const valueInput = document.getElementById('newApiKeyValue');
+    const addBtn = document.getElementById('addApiKeyBtn');
+    const toggleBtn = valueInput?.nextElementSibling;
+    
+    if (typeSelect && valueInput && addBtn) {
+        typeSelect.addEventListener('change', function() {
+            const hasSelection = this.value !== '';
+            valueInput.disabled = !hasSelection;
+            addBtn.disabled = !hasSelection;
+            if (toggleBtn) toggleBtn.disabled = !hasSelection;
+            
+            if (hasSelection) {
+                valueInput.focus();
+            } else {
+                valueInput.value = '';
+            }
+        });
+    }
+});
 
 // Utility functions
 function formatTimestamp(timestamp) {

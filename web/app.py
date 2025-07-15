@@ -438,9 +438,15 @@ def save_env_var():
                         existing_content[key] = value
         
         # Update with new values
+        updated_vars = []
         for key, value in env_vars.items():
             if value.strip():  # Only update if value is not empty
                 existing_content[key] = value.strip()
+                updated_vars.append(key)
+            else:  # Remove the key if empty value is provided
+                if key in existing_content:
+                    del existing_content[key]
+                    updated_vars.append(f"{key} (removed)")
         
         # Write back to .env file
         with open(env_path, 'w') as f:
@@ -452,8 +458,8 @@ def save_env_var():
         
         return jsonify({
             'success': True,
-            'message': 'Environment variables saved successfully',
-            'updated_vars': list(env_vars.keys())
+            'message': 'Environment variables updated successfully',
+            'updated_vars': updated_vars
         })
         
     except Exception as e:
@@ -462,41 +468,56 @@ def save_env_var():
 @app.route('/api/get_env_vars')
 def get_env_vars():
     """Get current environment variables (with masked values for security)"""
-    # Define which environment variables to show
-    tracked_vars = [
-        'GEMINI_API_KEY',
-        'OPENAI_API_KEY',
-        'ANTHROPIC_API_KEY'
-    ]
-    
-    env_vars = {}
-    for var in tracked_vars:
-        value = os.getenv(var)
-        if value:
-            # Mask sensitive values (API keys)
-            if 'API_KEY' in var:
-                env_vars[var] = {
-                    'value': value[:10] + '...' if len(value) > 10 else value,
-                    'masked': True,
-                    'configured': True
-                }
-            else:
-                env_vars[var] = {
-                    'value': value,
-                    'masked': False,
-                    'configured': True
-                }
-        else:
-            env_vars[var] = {
-                'value': '',
-                'masked': False,
-                'configured': False
-            }
-    
-    return jsonify({
-        'env_vars': env_vars,
-        'tracked_vars': tracked_vars
-    })
+    try:
+        # Read existing .env file to see what's actually configured
+        env_path = Path(__file__).parent.parent / '.env'
+        configured_vars = {}
+        
+        if env_path.exists():
+            with open(env_path, 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith('#') and '=' in line:
+                        key, value = line.split('=', 1)
+                        configured_vars[key] = value.strip()
+        
+        # Define potential environment variables that can be managed
+        potential_vars = [
+            'GEMINI_API_KEY',
+            'OPENAI_API_KEY',
+            'ANTHROPIC_API_KEY'
+        ]
+        
+        env_vars = {}
+        
+        # First, add variables that are actually in the .env file
+        for var, value in configured_vars.items():
+            if var in potential_vars:  # Only include managed variables
+                if 'API_KEY' in var:
+                    env_vars[var] = {
+                        'value': value[:10] + '...' if len(value) > 10 else value,
+                        'masked': True,
+                        'configured': True
+                    }
+                else:
+                    env_vars[var] = {
+                        'value': value,
+                        'masked': False,
+                        'configured': True
+                    }
+        
+        # Then, add potential variables that aren't configured yet (but only if requested)
+        # This allows the UI to show "Add new API key" options
+        available_vars = [var for var in potential_vars if var not in configured_vars]
+        
+        return jsonify({
+            'env_vars': env_vars,
+            'configured_vars': list(configured_vars.keys()),
+            'available_vars': available_vars
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/check_api_key')
 def check_api_key():

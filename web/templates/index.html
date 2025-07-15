@@ -309,7 +309,7 @@
 
     <!-- Environment Configuration Modal -->
     <div class="modal fade" id="envConfigModal" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">
@@ -333,57 +333,36 @@
                                     <i class="fas fa-brain"></i> AI Model API Keys
                                 </h6>
                                 
-                                <div class="mb-3">
-                                    <label for="geminiApiKey" class="form-label">
-                                        <i class="fas fa-key"></i> Gemini API Key
-                                    </label>
-                                    <div class="input-group">
-                                        <input type="password" class="form-control" id="geminiApiKey" 
-                                               placeholder="Enter Gemini API key...">
-                                        <button class="btn btn-outline-secondary" type="button" 
-                                                onclick="togglePasswordVisibility('geminiApiKey')">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </div>
-                                    <div class="form-text">
-                                        Get your API key from 
-                                        <a href="https://makersuite.google.com/app/apikey" target="_blank">Google AI Studio</a>
-                                    </div>
-                                </div>
+                                <!-- Configured API Keys will be populated here -->
+                                <div id="configuredApiKeys"></div>
                                 
+                                <!-- Add new API key section -->
                                 <div class="mb-3">
-                                    <label for="openaiApiKey" class="form-label">
-                                        <i class="fas fa-key"></i> OpenAI API Key
+                                    <label class="form-label">
+                                        <i class="fas fa-plus"></i> Add New API Key
                                     </label>
-                                    <div class="input-group">
-                                        <input type="password" class="form-control" id="openaiApiKey" 
-                                               placeholder="Enter OpenAI API key...">
-                                        <button class="btn btn-outline-secondary" type="button" 
-                                                onclick="togglePasswordVisibility('openaiApiKey')">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </div>
-                                    <div class="form-text">
-                                        Get your API key from 
-                                        <a href="https://platform.openai.com/api-keys" target="_blank">OpenAI Platform</a>
-                                    </div>
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label for="anthropicApiKey" class="form-label">
-                                        <i class="fas fa-key"></i> Anthropic API Key
-                                    </label>
-                                    <div class="input-group">
-                                        <input type="password" class="form-control" id="anthropicApiKey" 
-                                               placeholder="Enter Anthropic API key...">
-                                        <button class="btn btn-outline-secondary" type="button" 
-                                                onclick="togglePasswordVisibility('anthropicApiKey')">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </div>
-                                    <div class="form-text">
-                                        Get your API key from 
-                                        <a href="https://console.anthropic.com/" target="_blank">Anthropic Console</a>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <select class="form-select" id="newApiKeyType">
+                                                <option value="">Select API Provider...</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <input type="password" class="form-control" id="newApiKeyValue" 
+                                                       placeholder="Enter API key..." disabled>
+                                                <button class="btn btn-outline-secondary" type="button" 
+                                                        onclick="togglePasswordVisibility('newApiKeyValue')" disabled>
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button type="button" class="btn btn-outline-primary" 
+                                                    onclick="addNewApiKey()" disabled id="addApiKeyBtn">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
