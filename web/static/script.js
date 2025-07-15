@@ -143,7 +143,10 @@ async function loadExperiments() {
             <div class="experiment-item" onclick="viewExperiment('${exp.filename}')">
                 <div class="d-flex justify-content-between align-items-start">
                     <div class="flex-grow-1">
-                        ${exp.experiment_name ? `<div class="experiment-name fw-bold">${exp.experiment_name}</div>` : ''}
+                        <div class="d-flex align-items-center mb-1">
+                            <span class="badge bg-secondary me-2">#${exp.experiment_id}</span>
+                            ${exp.experiment_name ? `<span class="experiment-name fw-bold">${exp.experiment_name}</span>` : ''}
+                        </div>
                         <div class="experiment-model">
                             <i class="fas fa-robot"></i> ${exp.model}
                             ${exp.inference_time ? `<span class="badge bg-info ms-2">${formatInferenceTime(exp.inference_time)}</span>` : ''}
@@ -214,6 +217,9 @@ async function viewExperiment(filename) {
         const modalBody = document.getElementById('experimentDetails');
         modalBody.innerHTML = `
             <div class="experiment-details">
+                <h6><i class="fas fa-hashtag"></i> Experiment ID</h6>
+                <p><span class="badge bg-secondary">#${experiment.experiment_id || 'Unknown'}</span></p>
+                
                 ${experiment.experiment_name ? `
                 <h6><i class="fas fa-tag"></i> Experiment Name</h6>
                 <p class="fw-bold">${experiment.experiment_name}</p>
@@ -320,6 +326,7 @@ async function runExperiment() {
             description: description,
             prompt_template: promptTemplate,
             experiment_name: experimentName,
+            experiment_id: result.experiment_id,
             model_response: result.response,
             inference_time: result.inference_time,
             full_prompt: result.prompt,
@@ -352,6 +359,9 @@ function displayResults(result, experimentName = '') {
     
     // Display experiment name in the editable field
     document.getElementById('resultExperimentName').value = experimentName || '';
+    
+    // Display experiment ID (static, not editable)
+    document.getElementById('experimentId').textContent = result.experiment_id || '-';
     
     // Display inference time and model
     document.getElementById('inferenceTime').textContent = formatInferenceTime(result.inference_time);

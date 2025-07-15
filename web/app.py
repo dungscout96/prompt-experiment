@@ -33,21 +33,24 @@ def auto_save_experiment(experiment_data):
         experiments_dir = Path(__file__).parent.parent / 'prompt_experiments'
         experiments_dir.mkdir(exist_ok=True)
         
-        # Find next available filename
-        i = 0
-        while (experiments_dir / f'experiment_{i}.json').exists():
-            i += 1
+        # Find next available experiment ID
+        experiment_id = 0
+        while (experiments_dir / f'experiment_{experiment_id}.json').exists():
+            experiment_id += 1
         
-        filename = f'experiment_{i}.json'
+        # Add experiment ID to the data
+        experiment_data['experiment_id'] = experiment_id
+        
+        filename = f'experiment_{experiment_id}.json'
         
         # Save experiment
         with open(experiments_dir / filename, 'w') as f:
             json.dump(experiment_data, f, indent=2)
         
-        return filename
+        return filename, experiment_id
     except Exception as e:
         print(f"Error auto-saving experiment: {e}")
-        return None
+        return None, None
 
 # Default prompt template
 DEFAULT_PROMPT_TEMPLATE = '''
@@ -131,8 +134,18 @@ def get_experiments():
             try:
                 with open(file_path, 'r') as f:
                     data = json.load(f)
+                    # Extract experiment ID from filename if not in data
+                    experiment_id = data.get('experiment_id')
+                    if experiment_id is None:
+                        # Extract from filename for backward compatibility
+                        try:
+                            experiment_id = int(file_path.stem.split('_')[1])
+                        except (ValueError, IndexError):
+                            experiment_id = 0
+                    
                     experiments.append({
                         'filename': file_path.name,
+                        'experiment_id': experiment_id,
                         'model': data.get('model', 'Unknown'),
                         'timestamp': data.get('timestamp', 'Unknown'),
                         'inference_time': data.get('inference_time'),
@@ -141,6 +154,9 @@ def get_experiments():
                     })
             except Exception as e:
                 print(f"Error loading experiment {file_path}: {e}")
+    
+    # Sort by experiment ID (descending - most recent first)
+    experiments.sort(key=lambda x: x['experiment_id'], reverse=True)
     
     return jsonify(experiments)
 
@@ -219,7 +235,7 @@ def run_experiment():
         }
         
         # Save to filesystem automatically
-        saved_filename = auto_save_experiment(experiment_data)
+        saved_filename, experiment_id = auto_save_experiment(experiment_data)
         
         return jsonify({
             'success': True,
@@ -227,7 +243,8 @@ def run_experiment():
             'prompt': prompt,
             'inference_time': inference_time,
             'auto_saved': True,
-            'filename': saved_filename
+            'filename': saved_filename,
+            'experiment_id': experiment_id
         })
         
     except Exception as e:
@@ -257,12 +274,13 @@ def save_experiment():
             'timestamp': datetime.datetime.now().isoformat()
         }
         
-        filename = auto_save_experiment(experiment_data)
+        filename, experiment_id = auto_save_experiment(experiment_data)
         
         if filename:
             return jsonify({
                 'success': True,
-                'filename': filename
+                'filename': filename,
+                'experiment_id': experiment_id
             })
         else:
             return jsonify({'error': 'Failed to save experiment'}), 500
