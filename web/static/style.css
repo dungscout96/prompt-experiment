@@ -80,17 +80,36 @@ pre {
     padding: 0.75rem;
     margin-bottom: 0.5rem;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .experiment-item:hover {
     background-color: #f8f9fa;
     border-color: #0d6efd;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .experiment-model {
     font-size: 0.8rem;
     color: #6c757d;
+}
+
+.experiment-model .badge {
+    font-size: 0.7rem;
+    vertical-align: middle;
+}
+
+.inference-time-info {
+    background-color: #e9ecef;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.inference-time-info .badge {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.75rem;
 }
 
 .experiment-timestamp {
@@ -175,6 +194,14 @@ pre {
     font-size: 0.75rem;
 }
 
+.badge.bg-info {
+    background-color: #0dcaf0 !important;
+}
+
+.badge.bg-primary {
+    background-color: #0d6efd !important;
+}
+
 .icon-text {
     display: inline-flex;
     align-items: center;
@@ -206,4 +233,32 @@ pre {
 
 .rounded {
     border-radius: 0.5rem !important;
+}
+
+.dropdown-menu {
+    max-height: 300px;
+    overflow-y: auto;
+    min-width: 300px;
+}
+
+.dropdown-item {
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.input-group .dropdown-toggle {
+    border-left: none;
+}
+
+.input-group .form-control:focus + .dropdown-toggle {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.form-text {
+    margin-top: 0.25rem;
 }

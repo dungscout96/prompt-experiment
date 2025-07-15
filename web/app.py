@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 import os
 import json
 import datetime
+import time
 from pathlib import Path
 
 load_dotenv()
@@ -105,6 +106,7 @@ def get_experiments():
                         'filename': file_path.name,
                         'model': data.get('model', 'Unknown'),
                         'timestamp': data.get('timestamp', 'Unknown'),
+                        'inference_time': data.get('inference_time'),
                         'description': data.get('description', '')[:100] + '...' if len(data.get('description', '')) > 100 else data.get('description', '')
                     })
             except Exception as e:
@@ -148,6 +150,9 @@ def run_experiment():
         template = Template(prompt_template)
         prompt = template.render(hed_vocab=hed_vocab, description=description)
         
+        # Start timing
+        start_time = time.time()
+        
         # Choose the appropriate API based on model
         if model.startswith('gemini'):
             # Use Gemini API
@@ -167,10 +172,14 @@ def run_experiment():
             ])
             model_response = response['message']['content']
         
+        # Calculate inference time
+        inference_time = time.time() - start_time
+        
         return jsonify({
             'success': True,
             'response': model_response,
-            'prompt': prompt
+            'prompt': prompt,
+            'inference_time': inference_time
         })
         
     except Exception as e:
@@ -185,6 +194,7 @@ def save_experiment():
     prompt_template = data.get('prompt_template')
     description = data.get('description')
     model_response = data.get('model_response')
+    inference_time = data.get('inference_time')
     
     if not all([model, prompt_template, description, model_response]):
         return jsonify({'error': 'All fields are required'}), 400
@@ -207,6 +217,7 @@ def save_experiment():
             'prompt_template': prompt_template,
             'description': description,
             'model_response': model_response,
+            'inference_time': inference_time,
             'timestamp': datetime.datetime.now().isoformat()
         }
         
@@ -231,6 +242,31 @@ def download_experiment(filename):
         return jsonify({'error': 'Experiment not found'}), 404
     
     return send_file(file_path, as_attachment=True)
+
+@app.route('/api/descriptions')
+def get_descriptions():
+    """Get list of unique descriptions from saved experiments with usage counts"""
+    experiments_dir = Path(__file__).parent.parent / 'prompt_experiments'
+    description_counts = {}
+    
+    if experiments_dir.exists():
+        for file_path in experiments_dir.glob('*.json'):
+            try:
+                with open(file_path, 'r') as f:
+                    data = json.load(f)
+                    description = data.get('description', '').strip()
+                    if description:
+                        description_counts[description] = description_counts.get(description, 0) + 1
+            except Exception as e:
+                print(f"Error loading experiment {file_path}: {e}")
+    
+    # Sort by usage count (descending) then alphabetically
+    sorted_descriptions = sorted(description_counts.items(), key=lambda x: (-x[1], x[0]))
+    
+    return jsonify([{
+        'description': desc,
+        'count': count
+    } for desc, count in sorted_descriptions])
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

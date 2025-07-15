@@ -49,8 +49,27 @@
                     <div class="row mb-3">
                     <div class="col-12">
                         <label for="descriptionInput" class="form-label">Description</label>
-                        <textarea class="form-control" id="descriptionInput" rows="3" 
-                              placeholder="Enter your description..." required></textarea>
+                        <div class="input-group">
+                            <textarea class="form-control" id="descriptionInput" rows="3" 
+                                  placeholder="Enter your description..." required></textarea>
+                            <button class="btn btn-outline-secondary" type="button" 
+                                    onclick="clearDescription()" title="Clear description">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" 
+                                    data-bs-toggle="dropdown" aria-expanded="false" id="descriptionDropdown"
+                                    title="Select from history">
+                                <i class="fas fa-history"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" id="descriptionHistory">
+                                <li><a class="dropdown-item text-muted">Loading...</a></li>
+                            </ul>
+                        </div>
+                        <div class="form-text">
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle"></i> Use the history button to select from previous descriptions
+                            </small>
+                        </div>
                     </div>
                     </div>
                     <div class="mb-3">
@@ -108,6 +127,20 @@
                                 <pre id="fullPrompt" class="bg-light p-3 rounded" style="max-height: 400px; overflow-y: auto;"></pre>
                             </div>
                         </div>
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded">
+                                    <div>
+                                        <strong>Inference Time:</strong>
+                                        <span id="inferenceTime" class="badge bg-info ms-2">-</span>
+                                    </div>
+                                    <div>
+                                        <strong>Model:</strong>
+                                        <span id="resultModel" class="badge bg-primary ms-2">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -122,7 +155,7 @@
                     <div class="spinner-border text-primary" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
-                    <p class="mt-3 mb-0">Running experiment...</p>
+                    <p class="mt-3 mb-0">Running experiment and measuring inference time...</p>
                 </div>
             </div>
         </div>

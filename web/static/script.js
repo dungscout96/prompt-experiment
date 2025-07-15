@@ -61,6 +61,7 @@ Description from user:
 document.addEventListener('DOMContentLoaded', function() {
     loadModels();
     loadExperiments();
+    loadDescriptions();
     setupEventListeners();
     resetForm();
 });
@@ -143,8 +144,8 @@ async function loadExperiments() {
                     <div class="flex-grow-1">
                         <div class="experiment-model">
                             <i class="fas fa-robot"></i> ${exp.model}
+                            ${exp.inference_time ? `<span class="badge bg-info ms-2">${formatInferenceTime(exp.inference_time)}</span>` : ''}
                         </div>
-                        <div class="experiment-description text-truncate">${exp.description}</div>
                     </div>
                     <div class="experiment-timestamp">${formatTimestamp(exp.timestamp)}</div>
                 </div>
@@ -155,6 +156,42 @@ async function loadExperiments() {
         console.error('Error loading experiments:', error);
         document.getElementById('recentExperiments').innerHTML = 
             '<p class="text-danger">Error loading experiments.</p>';
+    }
+}
+
+// Load description history
+async function loadDescriptions() {
+    try {
+        const response = await fetch('/api/descriptions');
+        const descriptions = await response.json();
+        
+        const dropdown = document.getElementById('descriptionHistory');
+        
+        if (descriptions.length === 0) {
+            dropdown.innerHTML = '<li><a class="dropdown-item text-muted">No previous descriptions</a></li>';
+            return;
+        }
+        
+        dropdown.innerHTML = descriptions.map(item => {
+            const truncated = truncateText(item.description, 60);
+            const countBadge = item.count > 1 ? `<span class="badge bg-secondary ms-1">${item.count}</span>` : '';
+            return `<li><a class="dropdown-item" href="#" onclick="selectDescription('${escapeHtml(item.description)}')">${truncated}${countBadge}</a></li>`;
+        }).join('');
+        
+    } catch (error) {
+        console.error('Error loading descriptions:', error);
+        document.getElementById('descriptionHistory').innerHTML = 
+            '<li><a class="dropdown-item text-danger">Error loading descriptions</a></li>';
+    }
+}
+
+// Select description from history
+function selectDescription(description) {
+    document.getElementById('descriptionInput').value = description;
+    // Close dropdown
+    const dropdown = bootstrap.Dropdown.getInstance(document.getElementById('descriptionDropdown'));
+    if (dropdown) {
+        dropdown.hide();
     }
 }
 
@@ -181,8 +218,15 @@ async function viewExperiment(filename) {
                 <h6><i class="fas fa-clock"></i> Timestamp</h6>
                 <p>${formatTimestamp(experiment.timestamp)}</p>
                 
+                ${experiment.inference_time ? `
+                <h6><i class="fas fa-tachometer-alt"></i> Inference Time</h6>
+                <p><span class="badge bg-info">${formatInferenceTime(experiment.inference_time)}</span></p>
+                ` : ''}
+                
                 <h6><i class="fas fa-comment"></i> Description</h6>
-                <p>${experiment.description}</p>
+                <div class="p-2 bg-light rounded">
+                    <p class="mb-0">${experiment.description}</p>
+                </div>
                 
                 <h6><i class="fas fa-reply"></i> Model Response</h6>
                 <pre>${experiment.model_response}</pre>
@@ -267,6 +311,7 @@ async function runExperiment() {
             description: description,
             prompt_template: promptTemplate,
             model_response: result.response,
+            inference_time: result.inference_time,
             full_prompt: result.prompt
         };
         
@@ -284,6 +329,10 @@ async function runExperiment() {
 function displayResults(result) {
     document.getElementById('modelResponse').textContent = result.response;
     document.getElementById('fullPrompt').textContent = result.prompt;
+    
+    // Display inference time and model
+    document.getElementById('inferenceTime').textContent = formatInferenceTime(result.inference_time);
+    document.getElementById('resultModel').textContent = document.getElementById('modelSelect').value;
     
     // Show results section
     const resultsSection = document.getElementById('resultsSection');
@@ -323,8 +372,9 @@ async function saveExperiment() {
         
         showAlert(`Experiment saved as ${result.filename}`, 'success');
         
-        // Reload experiments list
+        // Reload experiments list and descriptions
         loadExperiments();
+        loadDescriptions();
         
     } catch (error) {
         console.error('Error saving experiment:', error);
@@ -341,6 +391,12 @@ function resetForm() {
     hideResults();
 }
 
+// Clear description field
+function clearDescription() {
+    document.getElementById('descriptionInput').value = '';
+    document.getElementById('descriptionInput').focus();
+}
+
 // Utility functions
 function formatTimestamp(timestamp) {
     if (!timestamp || timestamp === 'Unknown') return 'Unknown';
@@ -351,6 +407,31 @@ function formatTimestamp(timestamp) {
     } catch (error) {
         return timestamp;
     }
+}
+
+function formatInferenceTime(seconds) {
+    if (!seconds && seconds !== 0) return 'Unknown';
+    
+    if (seconds < 1) {
+        return `${Math.round(seconds * 1000)}ms`;
+    } else if (seconds < 60) {
+        return `${seconds.toFixed(2)}s`;
+    } else {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes}m ${remainingSeconds.toFixed(1)}s`;
+    }
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function truncateText(text, maxLength) {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
 }
 
 function showAlert(message, type = 'info') {
@@ -381,7 +462,8 @@ function showAlert(message, type = 'info') {
 // Handle page visibility changes
 document.addEventListener('visibilitychange', function() {
     if (!document.hidden) {
-        // Page became visible, refresh experiments
+        // Page became visible, refresh experiments and descriptions
         loadExperiments();
+        loadDescriptions();
     }
 });
