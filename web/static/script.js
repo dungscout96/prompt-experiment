@@ -150,8 +150,8 @@ async function loadExperiments() {
                         <div class="experiment-model">
                             <i class="fas fa-robot"></i> ${exp.model}
                             ${exp.inference_time ? `<span class="badge bg-info ms-2">${formatInferenceTime(exp.inference_time)}</span>` : ''}
-                            ${exp.validation_issues !== undefined ? `<span class="badge ${exp.validation_issues === 0 ? 'bg-success' : exp.validation_issues <= 3 ? 'bg-warning' : 'bg-danger'} ms-2">${exp.validation_issues} issues</span>` : ''}
-                            ${exp.quality_score !== undefined && exp.quality_score !== null ? `<span class="badge ${exp.quality_score >= 8 ? 'bg-success' : exp.quality_score >= 6 ? 'bg-warning' : exp.quality_score >= 4 ? 'bg-danger' : 'bg-dark'} ms-2">${exp.quality_score}/10</span>` : ''}
+                            ${exp.validation_issues !== undefined ? `<span class="badge bg-secondary ms-2">${exp.validation_issues} issues</span>` : ''}
+                            ${exp.quality_score !== undefined && exp.quality_score !== null ? `<span class="badge bg-secondary ms-2">${exp.quality_score}/10</span>` : ''}
                         </div>
                     </div>
                     <div class="experiment-timestamp">${formatTimestamp(exp.timestamp)}</div>
@@ -240,14 +240,14 @@ async function viewExperiment(filename) {
                 
                 ${experiment.validation_issues !== undefined ? `
                 <h6><i class="fas fa-check-circle"></i> Validation Results</h6>
-                <p><span class="badge ${experiment.validation_issues === 0 ? 'bg-success' : experiment.validation_issues <= 3 ? 'bg-warning' : 'bg-danger'}">${experiment.validation_issues} validation issues</span></p>
+                <p><span class="badge bg-secondary">${experiment.validation_issues} validation issues</span></p>
                 ` : ''}
                 
                 ${experiment.quality_grade && experiment.quality_grade.score !== undefined && experiment.quality_grade.score !== null ? `
                 <h6><i class="fas fa-star"></i> Quality Score</h6>
                 <div class="p-2 bg-light rounded mb-3">
                     <div class="d-flex justify-content-between align-items-center">
-                        <span class="badge ${experiment.quality_grade.score >= 8 ? 'bg-success' : experiment.quality_grade.score >= 6 ? 'bg-warning' : experiment.quality_grade.score >= 4 ? 'bg-danger' : 'bg-dark'}">${experiment.quality_grade.score}/10</span>
+                        <span class="badge bg-secondary">${experiment.quality_grade.score}/10</span>
                         <small class="text-muted">Graded by ${experiment.quality_grade.grader_model}</small>
                     </div>
                     <details class="mt-2">
@@ -272,9 +272,9 @@ async function viewExperiment(filename) {
                         <div class="fw-bold mb-1 d-flex justify-content-between align-items-center">
                             <span><i class="fas fa-tag"></i> HED Annotation:</span>
                             <div>
-                                <span class="badge ${experiment.validation_issues === 0 ? 'bg-success' : experiment.validation_issues <= 3 ? 'bg-warning' : 'bg-danger'}">${experiment.validation_issues || 0} issues</span>
+                                <span class="badge bg-secondary">${experiment.validation_issues || 0} issues</span>
                                 ${experiment.quality_grade && experiment.quality_grade.score !== undefined && experiment.quality_grade.score !== null ? `
-                                <span class="badge ${experiment.quality_grade.score >= 8 ? 'bg-success' : experiment.quality_grade.score >= 6 ? 'bg-warning' : experiment.quality_grade.score >= 4 ? 'bg-danger' : 'bg-dark'} ms-1">${experiment.quality_grade.score}/10</span>
+                                <span class="badge bg-secondary ms-1">${experiment.quality_grade.score}/10</span>
                                 ` : ''}
                             </div>
                         </div>
@@ -456,14 +456,8 @@ function displayResults(result, experimentName = '') {
     const validationBadge = document.getElementById('validationIssues');
     validationBadge.textContent = validationIssues;
     
-    // Set badge color based on validation results
-    if (validationIssues === 0) {
-        validationBadge.className = 'badge bg-success ms-2';
-    } else if (validationIssues <= 3) {
-        validationBadge.className = 'badge bg-warning ms-2';
-    } else {
-        validationBadge.className = 'badge bg-danger ms-2';
-    }
+    // Set badge color to neutral (remove conditional coloring)
+    validationBadge.className = 'badge bg-secondary ms-2';
     
     // Display quality score
     const qualityScore = result.quality_grade && result.quality_grade.score;
@@ -472,16 +466,8 @@ function displayResults(result, experimentName = '') {
     if (qualityScore !== null && qualityScore !== undefined) {
         qualityBadge.textContent = `${qualityScore}/10`;
         
-        // Set badge color based on quality score
-        if (qualityScore >= 8) {
-            qualityBadge.className = 'badge bg-success ms-2';
-        } else if (qualityScore >= 6) {
-            qualityBadge.className = 'badge bg-warning ms-2';
-        } else if (qualityScore >= 4) {
-            qualityBadge.className = 'badge bg-danger ms-2';
-        } else {
-            qualityBadge.className = 'badge bg-dark ms-2';
-        }
+        // Set badge color to neutral (remove conditional coloring)
+        qualityBadge.className = 'badge bg-secondary ms-2';
     } else {
         qualityBadge.textContent = '-';
         qualityBadge.className = 'badge bg-secondary ms-2';

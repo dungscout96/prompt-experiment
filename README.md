@@ -107,8 +107,7 @@ A web application for experimenting with Hierarchical Event Descriptor (HED) voc
 - **HED Validation**: Automatic validation of generated annotations with quality metrics
 - **LLM Quality Grading**: Automatic quality assessment of annotations using an LLM (e.g. mistral:latest) on a scale of 0-10
   - Real-time validation of extracted annotations
-  - Issue counting and color-coded quality indicators
-  - Green: 0 issues, Yellow: 1-3 issues, Red: >3 issues
+  - Issue counting and quality indicators
   - Detailed validation results shown in experiment details
 
 ### File Structure

@@ -122,7 +122,7 @@ def index():
 def get_models():
     """Get available models"""
     # For now, return common models. In a real app, you might query Ollama for available models
-    ollama_models = ['qwen3:8b', 'llama3:8b', 'mistral:7b', 'codellama:7b', 'gemma:7b']
+    ollama_models = ['qwen3:8b', 'llama3.2:latest', 'mistral:latest']
     gemini_models = ['gemini-2.5-flash']
     
     return jsonify({
@@ -592,7 +592,7 @@ def extract_annotations(text):
     matches = re.findall(pattern, text, re.DOTALL)
     return [match.strip() for match in matches if match.strip()]
 
-def grade_annotation_quality(description, annotation, grader_model='llama3.2:3b'):
+def grade_annotation_quality(description, annotation, grader_model='mistral:latest'):
     """
     Grade the quality of an annotation using an LLM grader.
     Returns a score from 0-10 based on clarity and how well the original description can be inferred.
