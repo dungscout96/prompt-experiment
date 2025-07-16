@@ -150,6 +150,7 @@ async function loadExperiments() {
                         <div class="experiment-model">
                             <i class="fas fa-robot"></i> ${exp.model}
                             ${exp.inference_time ? `<span class="badge bg-info ms-2">${formatInferenceTime(exp.inference_time)}</span>` : ''}
+                            ${exp.validation_issues !== undefined ? `<span class="badge ${exp.validation_issues === 0 ? 'bg-success' : exp.validation_issues <= 3 ? 'bg-warning' : 'bg-danger'} ms-2">${exp.validation_issues} issues</span>` : ''}
                         </div>
                     </div>
                     <div class="experiment-timestamp">${formatTimestamp(exp.timestamp)}</div>
@@ -236,6 +237,11 @@ async function viewExperiment(filename) {
                 <p><span class="badge bg-info">${formatInferenceTime(experiment.inference_time)}</span></p>
                 ` : ''}
                 
+                ${experiment.validation_issues !== undefined ? `
+                <h6><i class="fas fa-check-circle"></i> Validation Results</h6>
+                <p><span class="badge ${experiment.validation_issues === 0 ? 'bg-success' : experiment.validation_issues <= 3 ? 'bg-warning' : 'bg-danger'}">${experiment.validation_issues} validation issues</span></p>
+                ` : ''}
+                
                 <h6><i class="fas fa-comment"></i> Description</h6>
                 <div class="p-2 bg-light rounded">
                     <p class="mb-0">${experiment.description}</p>
@@ -244,15 +250,16 @@ async function viewExperiment(filename) {
                 <h6><i class="fas fa-reply"></i> Model Response</h6>
                 <pre>${experiment.model_response}</pre>
                 
-                ${experiment.annotations && experiment.annotations.length > 0 ? `
-                <h6><i class="fas fa-tags"></i> Extracted Annotations</h6>
+                ${experiment.annotation ? `
+                <h6><i class="fas fa-tag"></i> Extracted Annotation</h6>
                 <div class="bg-warning bg-opacity-10 p-3 rounded border border-warning">
-                    ${experiment.annotations.map((annotation, index) => `
-                        <div class="annotation-item mb-2 p-2 bg-white rounded border">
-                            <div class="fw-bold mb-1"><i class="fas fa-tag"></i> Annotation ${index + 1}:</div>
-                            <pre class="mb-0 text-dark" style="font-size: 0.9em;">${annotation}</pre>
+                    <div class="annotation-item mb-2 p-2 bg-white rounded border">
+                        <div class="fw-bold mb-1 d-flex justify-content-between align-items-center">
+                            <span><i class="fas fa-tag"></i> HED Annotation:</span>
+                            <span class="badge ${experiment.validation_issues === 0 ? 'bg-success' : experiment.validation_issues <= 3 ? 'bg-warning' : 'bg-danger'}">${experiment.validation_issues || 0} issues</span>
                         </div>
-                    `).join('')}
+                        <pre class="mb-0 text-dark" style="font-size: 0.9em;">${experiment.annotation}</pre>
+                    </div>
                 </div>
                 ` : ''}
                 
@@ -425,6 +432,20 @@ function displayResults(result, experimentName = '') {
     
     // Display experiment ID (static, not editable)
     document.getElementById('experimentId').textContent = result.experiment_id || '-';
+    
+    // Display validation issues
+    const validationIssues = result.validation_issues || 0;
+    const validationBadge = document.getElementById('validationIssues');
+    validationBadge.textContent = validationIssues;
+    
+    // Set badge color based on validation results
+    if (validationIssues === 0) {
+        validationBadge.className = 'badge bg-success ms-2';
+    } else if (validationIssues <= 3) {
+        validationBadge.className = 'badge bg-warning ms-2';
+    } else {
+        validationBadge.className = 'badge bg-danger ms-2';
+    }
     
     // Display inference time and model
     document.getElementById('inferenceTime').textContent = formatInferenceTime(result.inference_time);

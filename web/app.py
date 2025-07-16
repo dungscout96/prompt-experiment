@@ -11,6 +11,11 @@ import time
 from pathlib import Path
 import re
 
+# HED validation imports
+from hed import HedString, load_schema_version
+from hed.errors import ErrorHandler, get_printable_issue_string
+from hed.validator import HedValidator
+
 # Load environment variables from parent directory
 load_dotenv(Path(__file__).parent.parent / '.env')
 
@@ -152,7 +157,9 @@ def get_experiments():
                         'timestamp': data.get('timestamp', 'Unknown'),
                         'inference_time': data.get('inference_time'),
                         'experiment_name': data.get('experiment_name', ''),
-                        'description': data.get('description', '')[:100] + '...' if len(data.get('description', '')) > 100 else data.get('description', '')
+                        'description': data.get('description', '')[:100] + '...' if len(data.get('description', '')) > 100 else data.get('description', ''),
+                        'validation_issues': data.get('validation_issues', data.get('total_validation_issues', 0)),
+                        'annotation': data.get('annotation', data.get('annotations', [''])[0] if data.get('annotations') else '')
                     })
             except Exception as e:
                 print(f"Error loading experiment {file_path}: {e}")
@@ -231,6 +238,12 @@ def run_experiment():
         # Extract annotations from model response
         annotations = extract_annotations(model_response)
         
+        # Get the first annotation only (there should be only one)
+        annotation = annotations[0] if annotations else ""
+        
+        # Validate the single annotation
+        validation_issues = validate_hed_string(annotation) if annotation else 0
+        
         # Automatically save experiment to filesystem
         experiment_data = {
             'model': model,
@@ -238,7 +251,8 @@ def run_experiment():
             'description': description,
             'experiment_name': experiment_name,
             'model_response': model_response,
-            'annotations': annotations,
+            'annotation': annotation,
+            'validation_issues': validation_issues,
             'inference_time': inference_time,
             'timestamp': datetime.datetime.now().isoformat(),
             'prompt': prompt
@@ -250,7 +264,8 @@ def run_experiment():
         return jsonify({
             'success': True,
             'response': model_response,
-            'annotations': annotations,
+            'annotation': annotation,
+            'validation_issues': validation_issues,
             'prompt': prompt,
             'inference_time': inference_time,
             'auto_saved': True,
@@ -270,7 +285,7 @@ def save_experiment():
     prompt_template = data.get('prompt_template')
     description = data.get('description')
     model_response = data.get('model_response')
-    annotations = data.get('annotations', [])
+    annotation = data.get('annotation', '')
     inference_time = data.get('inference_time')
     
     if not all([model, prompt_template, description, model_response]):
@@ -282,7 +297,7 @@ def save_experiment():
             'prompt_template': prompt_template,
             'description': description,
             'model_response': model_response,
-            'annotations': annotations,
+            'annotation': annotation,
             'inference_time': inference_time,
             'timestamp': datetime.datetime.now().isoformat()
         }
@@ -527,6 +542,35 @@ def check_api_key():
         'has_api_key': bool(api_key),
         'key_preview': api_key[:10] + '...' if api_key else None
     })
+
+def validate_hed_string(hed_string: str, schema_name='standard', schema_version='8.4.0') -> int:
+    """
+    Validate a HED string and return the number of validation issues.
+    Returns 0 if no issues found, otherwise returns the count of issues.
+    """
+    try:
+        if schema_name != 'standard':
+            schema = load_schema_version(f'{schema_name}_{schema_version}')
+        else:
+            schema = load_schema_version(f'{schema_version}')
+        
+        check_for_warnings = True
+        data = hed_string
+        hedObj = HedString(data, schema)
+        short_string = hedObj.get_as_form('short_tag')
+
+        # Validate the string
+        error_handler = ErrorHandler(check_for_warnings=check_for_warnings)
+        validator = HedValidator(schema)
+        issues = validator.validate(hedObj, allow_placeholders=False, error_handler=error_handler)
+        
+        if issues:
+            return len(issues)
+        else:
+            return 0
+    except Exception as e:
+        print(f"HED validation error: {e}")
+        return -1  # Return -1 to indicate validation couldn't be performed
 
 def extract_annotations(text):
     """Extract text between --- ANNOTATION START --- and --- ANNOTATION END --- markers"""

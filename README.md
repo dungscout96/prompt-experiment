@@ -14,6 +14,7 @@ A web application for experimenting with Hierarchical Event Descriptor (HED) voc
 - **Inference Time Tracking**: Monitor model performance metrics
 - **Experiment Naming**: Organize experiments with custom names
 - **Auto-Save**: All experiments are automatically saved to the filesystem
+- **HED Validation**: Automatic validation of generated annotations with issue counting and quality metrics
 
 ## Getting Started
 
@@ -23,6 +24,7 @@ A web application for experimenting with Hierarchical Event Descriptor (HED) voc
 - [uv](https://github.com/astral-sh/uv) package manager
 - Google Gemini API key (if using Gemini models)
 - Ollama installed locally (if using Ollama models)
+- HED Python package for annotation validation
 
 ### Installation
 
@@ -101,6 +103,11 @@ A web application for experimenting with Hierarchical Event Descriptor (HED) voc
 - **HED Vocabulary Editor**: Edit the HED vocabulary XML schema
 - **Experiment Details**: View detailed information about any experiment
 - **Auto-Save**: All experiments are automatically saved with unique IDs
+- **HED Validation**: Automatic validation of generated annotations with quality metrics
+  - Real-time validation of extracted annotations
+  - Issue counting and color-coded quality indicators
+  - Green: 0 issues, Yellow: 1-3 issues, Red: >3 issues
+  - Detailed validation results shown in experiment details
 
 ### File Structure
 
@@ -134,6 +141,8 @@ All experiments are automatically saved in the `prompt_experiments/` folder with
   "description": "The user input description",
   "prompt_template": "The full prompt template used",
   "model_response": "The model's response",
+  "annotation": "(Action, Visual), (Object, Human)",
+  "validation_issues": 2,
   "inference_time": 2.34,
   "timestamp": "2025-01-15T10:30:00.123456",
   "prompt": "The complete rendered prompt sent to the model"
