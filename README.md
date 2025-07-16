@@ -15,6 +15,7 @@ A web application for experimenting with Hierarchical Event Descriptor (HED) voc
 - **Experiment Naming**: Organize experiments with custom names
 - **Auto-Save**: All experiments are automatically saved to the filesystem
 - **HED Validation**: Automatic validation of generated annotations with issue counting and quality metrics
+- **LLM Quality Grading**: Automatic quality assessment of annotations using llama3.2 on a scale of 0-10
 
 ## Getting Started
 
@@ -104,6 +105,7 @@ A web application for experimenting with Hierarchical Event Descriptor (HED) voc
 - **Experiment Details**: View detailed information about any experiment
 - **Auto-Save**: All experiments are automatically saved with unique IDs
 - **HED Validation**: Automatic validation of generated annotations with quality metrics
+- **LLM Quality Grading**: Automatic quality assessment of annotations using an LLM (e.g. mistral:latest) on a scale of 0-10
   - Real-time validation of extracted annotations
   - Issue counting and color-coded quality indicators
   - Green: 0 issues, Yellow: 1-3 issues, Red: >3 issues
@@ -143,6 +145,11 @@ All experiments are automatically saved in the `prompt_experiments/` folder with
   "model_response": "The model's response",
   "annotation": "(Action, Visual), (Object, Human)",
   "validation_issues": 2,
+  "quality_grade": {
+    "score": 7.5,
+    "full_response": "The annotation captures most concepts from the description with good clarity. Score: 7.5/10",
+    "grader_model": "llama3.2:3b"
+  },
   "inference_time": 2.34,
   "timestamp": "2025-01-15T10:30:00.123456",
   "prompt": "The complete rendered prompt sent to the model"

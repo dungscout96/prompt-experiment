@@ -151,6 +151,7 @@ async function loadExperiments() {
                             <i class="fas fa-robot"></i> ${exp.model}
                             ${exp.inference_time ? `<span class="badge bg-info ms-2">${formatInferenceTime(exp.inference_time)}</span>` : ''}
                             ${exp.validation_issues !== undefined ? `<span class="badge ${exp.validation_issues === 0 ? 'bg-success' : exp.validation_issues <= 3 ? 'bg-warning' : 'bg-danger'} ms-2">${exp.validation_issues} issues</span>` : ''}
+                            ${exp.quality_score !== undefined && exp.quality_score !== null ? `<span class="badge ${exp.quality_score >= 8 ? 'bg-success' : exp.quality_score >= 6 ? 'bg-warning' : exp.quality_score >= 4 ? 'bg-danger' : 'bg-dark'} ms-2">${exp.quality_score}/10</span>` : ''}
                         </div>
                     </div>
                     <div class="experiment-timestamp">${formatTimestamp(exp.timestamp)}</div>
@@ -242,6 +243,20 @@ async function viewExperiment(filename) {
                 <p><span class="badge ${experiment.validation_issues === 0 ? 'bg-success' : experiment.validation_issues <= 3 ? 'bg-warning' : 'bg-danger'}">${experiment.validation_issues} validation issues</span></p>
                 ` : ''}
                 
+                ${experiment.quality_grade && experiment.quality_grade.score !== undefined && experiment.quality_grade.score !== null ? `
+                <h6><i class="fas fa-star"></i> Quality Score</h6>
+                <div class="p-2 bg-light rounded mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge ${experiment.quality_grade.score >= 8 ? 'bg-success' : experiment.quality_grade.score >= 6 ? 'bg-warning' : experiment.quality_grade.score >= 4 ? 'bg-danger' : 'bg-dark'}">${experiment.quality_grade.score}/10</span>
+                        <small class="text-muted">Graded by ${experiment.quality_grade.grader_model}</small>
+                    </div>
+                    <details class="mt-2">
+                        <summary class="text-muted" style="cursor: pointer;">View grader response</summary>
+                        <pre class="mt-2 text-dark" style="font-size: 0.8em;">${experiment.quality_grade.full_response}</pre>
+                    </details>
+                </div>
+                ` : ''}
+                
                 <h6><i class="fas fa-comment"></i> Description</h6>
                 <div class="p-2 bg-light rounded">
                     <p class="mb-0">${experiment.description}</p>
@@ -256,7 +271,12 @@ async function viewExperiment(filename) {
                     <div class="annotation-item mb-2 p-2 bg-white rounded border">
                         <div class="fw-bold mb-1 d-flex justify-content-between align-items-center">
                             <span><i class="fas fa-tag"></i> HED Annotation:</span>
-                            <span class="badge ${experiment.validation_issues === 0 ? 'bg-success' : experiment.validation_issues <= 3 ? 'bg-warning' : 'bg-danger'}">${experiment.validation_issues || 0} issues</span>
+                            <div>
+                                <span class="badge ${experiment.validation_issues === 0 ? 'bg-success' : experiment.validation_issues <= 3 ? 'bg-warning' : 'bg-danger'}">${experiment.validation_issues || 0} issues</span>
+                                ${experiment.quality_grade && experiment.quality_grade.score !== undefined && experiment.quality_grade.score !== null ? `
+                                <span class="badge ${experiment.quality_grade.score >= 8 ? 'bg-success' : experiment.quality_grade.score >= 6 ? 'bg-warning' : experiment.quality_grade.score >= 4 ? 'bg-danger' : 'bg-dark'} ms-1">${experiment.quality_grade.score}/10</span>
+                                ` : ''}
+                            </div>
                         </div>
                         <pre class="mb-0 text-dark" style="font-size: 0.9em;">${experiment.annotation}</pre>
                     </div>
@@ -395,32 +415,30 @@ function displayResults(result, experimentName = '') {
     document.getElementById('modelResponse').textContent = result.response;
     document.getElementById('fullPrompt').textContent = result.prompt;
     
-    // Display extracted annotations
+    // Display single annotation (updated format)
     const annotationsSection = document.getElementById('annotationsSection');
     const annotationsList = document.getElementById('annotationsList');
     
-    if (result.annotations && result.annotations.length > 0) {
+    if (result.annotation && result.annotation.trim()) {
         // Clear previous annotations
         annotationsList.innerHTML = '';
         
-        // Display each annotation
-        result.annotations.forEach((annotation, index) => {
-            const annotationDiv = document.createElement('div');
-            annotationDiv.className = 'annotation-item mb-2 p-2 bg-white rounded border';
-            
-            const header = document.createElement('div');
-            header.className = 'fw-bold mb-1';
-            header.innerHTML = `<i class="fas fa-tag"></i> Annotation ${index + 1}:`;
-            
-            const content = document.createElement('pre');
-            content.className = 'mb-0 text-dark';
-            content.style.fontSize = '0.9em';
-            content.textContent = annotation;
-            
-            annotationDiv.appendChild(header);
-            annotationDiv.appendChild(content);
-            annotationsList.appendChild(annotationDiv);
-        });
+        // Display the single annotation
+        const annotationDiv = document.createElement('div');
+        annotationDiv.className = 'annotation-item mb-2 p-2 bg-white rounded border';
+        
+        const header = document.createElement('div');
+        header.className = 'fw-bold mb-1';
+        header.innerHTML = `<i class="fas fa-tag"></i> Generated Annotation:`;
+        
+        const content = document.createElement('pre');
+        content.className = 'mb-0 text-dark';
+        content.style.fontSize = '0.9em';
+        content.textContent = result.annotation;
+        
+        annotationDiv.appendChild(header);
+        annotationDiv.appendChild(content);
+        annotationsList.appendChild(annotationDiv);
         
         annotationsSection.style.display = 'block';
     } else {
@@ -445,6 +463,28 @@ function displayResults(result, experimentName = '') {
         validationBadge.className = 'badge bg-warning ms-2';
     } else {
         validationBadge.className = 'badge bg-danger ms-2';
+    }
+    
+    // Display quality score
+    const qualityScore = result.quality_grade && result.quality_grade.score;
+    const qualityBadge = document.getElementById('qualityScore');
+    
+    if (qualityScore !== null && qualityScore !== undefined) {
+        qualityBadge.textContent = `${qualityScore}/10`;
+        
+        // Set badge color based on quality score
+        if (qualityScore >= 8) {
+            qualityBadge.className = 'badge bg-success ms-2';
+        } else if (qualityScore >= 6) {
+            qualityBadge.className = 'badge bg-warning ms-2';
+        } else if (qualityScore >= 4) {
+            qualityBadge.className = 'badge bg-danger ms-2';
+        } else {
+            qualityBadge.className = 'badge bg-dark ms-2';
+        }
+    } else {
+        qualityBadge.textContent = '-';
+        qualityBadge.className = 'badge bg-secondary ms-2';
     }
     
     // Display inference time and model

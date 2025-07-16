@@ -150,6 +150,10 @@ def get_experiments():
                         except (ValueError, IndexError):
                             experiment_id = 0
                     
+                    # Get quality grade information
+                    quality_grade = data.get('quality_grade', {})
+                    quality_score = quality_grade.get('score') if quality_grade else None
+                    
                     experiments.append({
                         'filename': file_path.name,
                         'experiment_id': experiment_id,
@@ -159,7 +163,8 @@ def get_experiments():
                         'experiment_name': data.get('experiment_name', ''),
                         'description': data.get('description', '')[:100] + '...' if len(data.get('description', '')) > 100 else data.get('description', ''),
                         'validation_issues': data.get('validation_issues', data.get('total_validation_issues', 0)),
-                        'annotation': data.get('annotation', data.get('annotations', [''])[0] if data.get('annotations') else '')
+                        'annotation': data.get('annotation', data.get('annotations', [''])[0] if data.get('annotations') else ''),
+                        'quality_score': quality_score
                     })
             except Exception as e:
                 print(f"Error loading experiment {file_path}: {e}")
@@ -244,6 +249,13 @@ def run_experiment():
         # Validate the single annotation
         validation_issues = validate_hed_string(annotation) if annotation else 0
         
+        # Grade the annotation quality
+        quality_grade = grade_annotation_quality(description, annotation) if annotation else {
+            'score': None,
+            'full_response': 'No annotation to grade',
+            'grader_model': 'llama3.2:3b'
+        }
+        
         # Automatically save experiment to filesystem
         experiment_data = {
             'model': model,
@@ -253,6 +265,7 @@ def run_experiment():
             'model_response': model_response,
             'annotation': annotation,
             'validation_issues': validation_issues,
+            'quality_grade': quality_grade,
             'inference_time': inference_time,
             'timestamp': datetime.datetime.now().isoformat(),
             'prompt': prompt
@@ -266,6 +279,7 @@ def run_experiment():
             'response': model_response,
             'annotation': annotation,
             'validation_issues': validation_issues,
+            'quality_grade': quality_grade,
             'prompt': prompt,
             'inference_time': inference_time,
             'auto_saved': True,
@@ -577,6 +591,75 @@ def extract_annotations(text):
     pattern = r'--- ANNOTATION START ---\s*(.*?)\s*--- ANNOTATION END ---'
     matches = re.findall(pattern, text, re.DOTALL)
     return [match.strip() for match in matches if match.strip()]
+
+def grade_annotation_quality(description, annotation, grader_model='llama3.2:3b'):
+    """
+    Grade the quality of an annotation using an LLM grader.
+    Returns a score from 0-10 based on clarity and how well the original description can be inferred.
+    """
+    try:
+        # Quality grading prompt template
+        grading_prompt = f"""Here's the requested description to be translated: 
+
+{description}
+
+Here's the generated annotation:
+
+{annotation}
+
+Evaluate the quality of the annotation on the scale of 0-10 based on clarity and how well the original description can be inferred from the annotation"""
+        
+        # Use Ollama API to grade the annotation
+        response = chat(model=grader_model, messages=[
+            {
+                'role': 'user',
+                'content': grading_prompt,
+            },
+        ])
+        
+        grader_response = response['message']['content']
+        
+        # Extract numeric score from response
+        score = extract_quality_score(grader_response)
+        
+        return {
+            'score': score,
+            'full_response': grader_response,
+            'grader_model': grader_model
+        }
+        
+    except Exception as e:
+        print(f"Quality grading error: {e}")
+        return {
+            'score': None,
+            'full_response': f"Error: {str(e)}",
+            'grader_model': grader_model
+        }
+
+def extract_quality_score(response_text):
+    """Extract numeric score from grader response"""
+    import re
+    
+    # Look for patterns like "8/10", "score: 7", "rating of 9", etc.
+    patterns = [
+        r'(\d+(?:\.\d+)?)/10',  # X/10 format
+        r'(?:score|rating|grade)(?:\s*:?\s*|\s+(?:of|is)\s+)(\d+(?:\.\d+)?)',  # score: X, rating of X, etc.
+        r'(\d+(?:\.\d+)?)\s*(?:out of 10|/10)',  # X out of 10
+        r'(?:^|\s)(\d+(?:\.\d+)?)(?:\s*$|\s)',  # standalone number
+    ]
+    
+    for pattern in patterns:
+        matches = re.findall(pattern, response_text, re.IGNORECASE)
+        if matches:
+            try:
+                score = float(matches[0])
+                # Ensure score is within 0-10 range
+                if 0 <= score <= 10:
+                    return score
+            except ValueError:
+                continue
+    
+    return None
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=3000)

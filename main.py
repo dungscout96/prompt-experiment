@@ -98,3 +98,4 @@ with open(f'{filename}{i}.json', 'w') as f:
         'prompt_template': prompt_template,
         'model_response': response['message']['content']
     }, f)
+
